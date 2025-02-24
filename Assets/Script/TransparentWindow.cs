@@ -3,9 +3,14 @@ using System;
 using System.Collections;
 using UnityEngine;
 using System.Runtime.InteropServices;
+using TMPro;
+
 
 public class TransparentWindow : MonoBehaviour
 {
+    public TextMeshProUGUI text;
+    
+    
     // 引入外部 Windows 函数，用于弹出消息框
     [DllImport("user32.dll")]
     public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
@@ -104,6 +109,11 @@ public class TransparentWindow : MonoBehaviour
         
         // 让应用程序在后台运行，确保即使窗口不在前台也能保持运行
         Application.runInBackground = true;
+        
+        Vector2 newPosition = this.GetComponent<RectTransform>().anchoredPosition;
+        newPosition.y += GetTaskBarHeight();
+        this.GetComponent<RectTransform>().anchoredPosition = newPosition;
+        text.text = GetTaskBarHeight().ToString();
     }
     
     
@@ -117,7 +127,11 @@ public class TransparentWindow : MonoBehaviour
         IntPtr hWnd = FindWindow("Shell_TrayWnd", 0);       //找到任务栏窗口
         RECT rect = new RECT();
         GetWindowRect(hWnd, ref rect);                      //获取任务栏的窗口位置及大小
+        
+        float screenHeight = Screen.currentResolution.height;
+        float scaleFactorY = 1080f/screenHeight;
         taskbarHeight = (int)(rect.Bottom - rect.Top);      //得到任务栏的高度
+        taskbarHeight = (int)(taskbarHeight * scaleFactorY);
         return taskbarHeight;
     }
 }
