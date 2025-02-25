@@ -8,9 +8,6 @@ using TMPro;
 
 public class TransparentWindow : MonoBehaviour
 {
-    public TextMeshProUGUI text;
-    
-    
     // 引入外部 Windows 函数，用于弹出消息框
     [DllImport("user32.dll")]
     public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
@@ -113,7 +110,6 @@ public class TransparentWindow : MonoBehaviour
         Vector2 newPosition = this.GetComponent<RectTransform>().anchoredPosition;
         newPosition.y += GetTaskBarHeight();
         this.GetComponent<RectTransform>().anchoredPosition = newPosition;
-        text.text = GetTaskBarHeight().ToString();
     }
     
     
