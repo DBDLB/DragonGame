@@ -15,8 +15,9 @@ public class DragonEggButton : MonoBehaviour
     private void OnClicked()
     {
         IncubationUI.Instance.ShowEggDetails(item);
-        Image image = IncubationUI.Instance.incubatorController.GetComponent<Image>();
+        Image image = IncubationUI.Instance.selectEgg;
         image.sprite = item.icon;
         image.color = Color.white;
+        IncubationUI.Instance.startButton.interactable = true;
     }
 }

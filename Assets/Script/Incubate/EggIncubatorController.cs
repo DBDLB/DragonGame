@@ -1,9 +1,16 @@
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EggIncubatorController : MonoBehaviour
 {
     // 当前孵化的龙蛋
     private DragonEgg currentEgg;
+
+    private void OnEnable()
+    {
+        currentEgg = null;
+    }
 
     private void Update()
     {
@@ -16,9 +23,8 @@ public class EggIncubatorController : MonoBehaviour
             // 如果孵化完成，则生成龙
             if (currentEgg.IsIncubationComplete())
             {
-                currentEgg.HatchEgg();
-                Debug.Log("孵化完成，获得的龙是: " + currentEgg.hatchedDragon.dragonName);
-                IncubationUI.Instance.OnEndIncubation();
+                IncubationUI.Instance.egg = currentEgg;
+                IncubationUI.Instance.hatchingEggImage.GetComponent<Button>().interactable = true;
             }
         }
     }

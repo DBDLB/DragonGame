@@ -27,9 +27,12 @@ public class IncubationUI : MonoBehaviour
     public TextMeshProUGUI incubationTimeText;
     public Button startButton;
     public Image hatchingEggImage;
+    public Image selectEgg;
 
     // 孵蛋控制器
     public EggIncubatorController incubatorController;
+    public Button IncubateButton;
+    public Slider IncubateProgressBar;
 
     private DragonEgg selectedEgg;
 
@@ -38,6 +41,10 @@ public class IncubationUI : MonoBehaviour
         // 默认状态不显示孵蛋信息
         eggNameText.gameObject.SetActive(false);
         incubationTimeText.gameObject.SetActive(false);
+        IncubateProgressBar.gameObject.SetActive(false);
+        hatchingEggImage.gameObject.SetActive(false);
+        hatchingEggImage.GetComponent<Button>().interactable = false;
+        startButton.interactable = false;
         // startButton.gameObject.SetActive(false);
 
         // 注册孵蛋按钮的点击事件
@@ -61,21 +68,25 @@ public class IncubationUI : MonoBehaviour
     {
         if (selectedEgg != null)
         {
+            hatchingEggImage.gameObject.SetActive(true);
             hatchingEggImage.sprite = selectedEgg.icon;
             hatchingEggImage.color = Color.white;
             selectedEgg.StartIncubation();
             incubatorController.StartIncubation(selectedEgg);
-            incubatorController.GetComponent<Button>().interactable = false;
+            IncubateButton.interactable = false;
+            IncubateProgressBar.gameObject.SetActive(true);
         }
     }
     
     //结束孵化
     public void OnEndIncubation()
     {
-        hatchingEggImage.sprite = null;
-        hatchingEggImage.color = new Color(0, 0, 0, 0);
-        incubatorController.GetComponent<Image>().sprite = null;
-        IncubationUI.Instance.incubatorController.GetComponent<Button>().interactable = true;
+        selectEgg.sprite = null;
+        IncubateButton.interactable = true;
+        IncubateProgressBar.gameObject.SetActive(false);
+        startButton.interactable = false;
+        eggNameText.text = "选择的龙蛋: 无";
+        incubationTimeText.text = "孵化时间: 无";
     }
 
     // 更新孵化进度显示（可以根据需要做进度条等）
@@ -84,7 +95,22 @@ public class IncubationUI : MonoBehaviour
         if (selectedEgg != null && selectedEgg.status == EggStatus.InProgress)
         {
             float remainingTime = selectedEgg.incubationTime - (Time.time - selectedEgg.incubationStartTime);
-            incubationTimeText.text = "剩余时间: " + Mathf.Max(remainingTime, 0) + "秒";
+            remainingTime = Mathf.Max(0, remainingTime);
+            IncubateProgressBar.value = 1 - remainingTime / selectedEgg.incubationTime; ;
+            IncubateProgressBar.GetComponentInChildren<TextMeshProUGUI>().text = remainingTime.ToString("F2") + "s";
         }
+    }
+
+    [HideInInspector] public DragonEgg egg;
+    //获取孵化结果
+    public void GetHatchedDragon()
+    {
+        hatchingEggImage.sprite = null;
+        hatchingEggImage.color = new Color(0, 0, 0, 0);
+        hatchingEggImage.gameObject.SetActive(false);
+        hatchingEggImage.GetComponent<Button>().interactable = false;
+        egg.HatchEgg();
+        Debug.Log("孵化完成，获得的龙是: " + egg.hatchedDragon.dragonName);
+        OnEndIncubation();
     }
 }
