@@ -18,7 +18,7 @@ public class ShowDragonEggUI : MonoBehaviour
             {
                 //生成一个DragonEggButton到Content下
                 GameObject slot = Instantiate(DragonEggButton, Content.transform);
-                slot.GetComponent<DragonEggButton>().item = item.GetComponent<DragonEgg>();
+                slot.GetComponent<DragonEggButton>().item = item as DragonEgg;
                 Image image = null;
                 Image[] images = slot.GetComponentsInChildren<Image>(true);
                 foreach (var img in images)

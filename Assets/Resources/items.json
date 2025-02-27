@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "name": "dragonEgg_1",
+      "description": "egg.",
+      "icon": "dragonEgg_1",
+      "type": "DragonEgg",
+      "isStackable": false,
+      "value": 50
+    },
+    {
+      "id": 2,
+      "name": "dragonEgg_2",
+      "description": "egg.",
+      "icon": "dragonEgg_2",
+      "type": "DragonEgg",
+      "isStackable": false,
+      "value": 30
+    },
+    {
+      "id": 3,
+      "name": "dragonEgg_3",
+      "description": "egg.",
+      "icon": "dragonEgg_3",
+      "type": "DragonEgg",
+      "isStackable": false,
+      "value": 1
+    }
+  ]
+}

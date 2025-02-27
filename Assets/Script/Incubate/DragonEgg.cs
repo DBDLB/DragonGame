@@ -25,7 +25,7 @@ public class DragonEgg : Item
     {
         // 初始状态为未孵化
         status = EggStatus.NotStarted;
-        itemName = this.gameObject.name;
+        // itemName = this.gameObject.name;
         Inventory.Instance.AddItem(this);
     }
 
