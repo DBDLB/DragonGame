@@ -9,9 +9,18 @@ public class ShowDragonEggUI : MonoBehaviour
     public static EggIncubatorController eggIncubatorController;
     public GameObject DragonEggButton;
     public GameObject Content;
+    
+    public List<GameObject> slots = new List<GameObject>();
 
     private void OnEnable()
     {
+        //删除Content下的所有子物体
+        foreach (var slot in slots)
+        {
+            Destroy(slot);
+        }
+        slots.Clear();
+        
         foreach (var item in Inventory.Instance.items)
         {
             if (item.itemType == ItemType.DragonEgg)
@@ -29,6 +38,7 @@ public class ShowDragonEggUI : MonoBehaviour
                     }
                 }
                 image.sprite = item.icon;
+                slots.Add(slot);
             }
         }
     }

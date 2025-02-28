@@ -75,6 +75,25 @@ public class IncubationUI : MonoBehaviour
             incubatorController.StartIncubation(selectedEgg);
             IncubateButton.interactable = false;
             IncubateProgressBar.gameObject.SetActive(true);
+            Inventory.Instance.RemoveItem(selectedEgg);
+        }
+    }
+    
+    public void CancelIncubation()
+    {
+        if (selectedEgg != null)
+        {
+            selectEgg.sprite = null;
+            IncubateButton.interactable = true;
+            IncubateProgressBar.gameObject.SetActive(false);
+            startButton.interactable = false;
+            eggNameText.text = "选择的龙蛋: 无";
+            incubationTimeText.text = "孵化时间: 无";
+            hatchingEggImage.sprite = null;
+            hatchingEggImage.color = new Color(0, 0, 0, 0);
+            hatchingEggImage.gameObject.SetActive(false);
+            hatchingEggImage.GetComponent<Button>().interactable = false;
+            Inventory.Instance.AddItem(selectedEgg);
         }
     }
     
@@ -102,6 +121,7 @@ public class IncubationUI : MonoBehaviour
     }
 
     [HideInInspector] public DragonEgg egg;
+    public GetDragonUI getDragonUI;
     //获取孵化结果
     public void GetHatchedDragon()
     {
@@ -109,8 +129,9 @@ public class IncubationUI : MonoBehaviour
         hatchingEggImage.color = new Color(0, 0, 0, 0);
         hatchingEggImage.gameObject.SetActive(false);
         hatchingEggImage.GetComponent<Button>().interactable = false;
-        egg.HatchEgg();
-        Debug.Log("孵化完成，获得的龙是: " + egg.hatchedDragon.dragonName);
+        Dragon dragon = egg.HatchEgg();
+        Debug.Log("孵化完成，获得的龙是: " + egg.hatchedDragonId);
+        getDragonUI.ShowDragonUI(dragon);
         OnEndIncubation();
     }
 }

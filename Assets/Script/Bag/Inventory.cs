@@ -4,7 +4,8 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     // 背包中可以存储的物品数量
-    public int maxSlots = 100;
+    public ShowBagUI showBagUI;
+    public int maxSlots = 20;
     public List<Item> items = new List<Item>(); // 存储所有物品的列表
     
     
@@ -30,7 +31,7 @@ public class Inventory : MonoBehaviour
     public bool AddItem(Item item)
     {
         // 如果背包没有空位
-        if (items.Count >= maxSlots) return false;
+        // if (items.Count >= maxSlots) return false;
 
         // 如果物品可以堆叠且背包已有该物品
         if (item.isStackable)
@@ -47,6 +48,7 @@ public class Inventory : MonoBehaviour
 
         // 否则，直接添加新的物品
         items.Add(item);
+        showBagUI.ShowBag();
         return true;
     }
 
@@ -57,6 +59,7 @@ public class Inventory : MonoBehaviour
         {
             items.Remove(item);
         }
+        showBagUI.ShowBag();
     }
 
     // 获取物品的数量
@@ -69,5 +72,6 @@ public class Inventory : MonoBehaviour
     public void Clear()
     {
         items.Clear();
+        showBagUI.ShowBag();
     }
 }

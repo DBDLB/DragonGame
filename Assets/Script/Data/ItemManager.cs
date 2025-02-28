@@ -1,10 +1,30 @@
+using System;
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
 
 public class ItemManager : MonoBehaviour
 {
+    public InstantiatePrefabData itemInstantiatePrefabData;  // 引用 ItemDatabase
     private Dictionary<int, ItemData> itemDatabase = new Dictionary<int, ItemData>(); // 道具数据库
+    
+    public static ItemManager instance;
+    public static ItemManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<ItemManager>();
+                if (instance == null)
+                {
+                    GameObject singleton = new GameObject(typeof(ItemManager).Name);
+                    instance = singleton.AddComponent<ItemManager>();
+                }
+            }
+            return instance;
+        }
+    }
 
     void Start()
     {
@@ -46,29 +66,38 @@ public class ItemManager : MonoBehaviour
     }
 
     // 实例化道具
-    public void InstantiateItem(int id)
+    public Item InstantiateItem(int id)
     {
         ItemData itemData = GetItemByID(id);
+        Item item = null;
         if (itemData != null)
         {
-            switch (itemData.type)
+            ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), itemData.type);
+            switch (itemType)
             {
-                case "DragonEgg":
+                case ItemType.DragonEgg:
                     // 实例化龙蛋
-                    
-                    
+                    Sprite icon = Resources.Load<Sprite>("Icons/" + itemData.icon);
+                    DragonEgg dragonEgg = new DragonEgg(itemData.name,itemType,1,icon,bool.Parse(itemData.isStackable),itemData.incubationTime,itemData.instantiateSucceed);
+                    Inventory.Instance.AddItem(dragonEgg);
+                    item = dragonEgg;
                     break;
-                case "Resource":
+                case ItemType.Resource:
                     // 实例化资源
                     break;
-                case "Equipment":
-                    // 实例化装备
+                case ItemType.Dragon:
+                    // 实例化龙
+                    Sprite dragonIcon = Resources.Load<Sprite>("Icons/" + itemData.icon);
+                    Item dragon = new Dragon(itemData.name,itemType,1,dragonIcon,bool.Parse(itemData.isStackable),itemData.health,itemData.attack,itemData.defense);
+                    Inventory.Instance.AddItem(dragon);
+                    item = dragon;
                     break;
                 default:
                     Debug.LogWarning("Unknown item type: " + itemData.type);
                     break;
             }
         }
+        return item;
     }
 }
 
@@ -87,6 +116,19 @@ public class ItemData
     public string description;
     public string icon;
     public string type;
-    public string isStackable;
+    public string isStackable; 
     public int value;
+    
+    //龙蛋
+    public float incubationTime;
+    public int instantiateSucceed;
+    
+    //龙
+    //生命
+    public int health;
+    //攻击力
+    public int attack;
+    //防御力
+    public int defense;
+   
 }
