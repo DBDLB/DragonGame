@@ -8,7 +8,7 @@ public class Dragon : Item
     public int attack;
     //防御力
     public int defense;
-    public Dragon(string name, ItemType type, int quantity, Sprite icon, bool stackable, int health, int attack, int defense) : base(name, type, quantity, icon, stackable)
+    public Dragon(string name, ItemType type, int quantity, Sprite icon, bool stackable, int health, int attack, int defense,int id,int itemID)  : base(name, type, quantity, icon, stackable,id,itemID)
     {
         this.health = health;
         this.attack = attack;

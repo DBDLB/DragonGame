@@ -16,15 +16,17 @@ public class Item
     public Sprite icon;           // 物品图标
     public bool isStackable;      // 是否可以堆叠
     public int itemID;           // 物品ID（唯一标识）
+    public int id;                // 物品种类ID
 
-    public Item(string name, ItemType type, int quantity, Sprite icon, bool stackable)
+    public Item(string name, ItemType type, int quantity, Sprite icon, bool stackable,int id,int itemID)
     {
         itemName = name;
         itemType = type;
         this.quantity = quantity;
         this.icon = icon;
         isStackable = stackable;
-        itemID = ItemIDGenerator.GetUniqueID(); // 获取唯一ID
+        this.itemID = itemID;
+        this.id = id;
     }
 
     // 增加物品数量

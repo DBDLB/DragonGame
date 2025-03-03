@@ -49,6 +49,9 @@ public class Inventory : MonoBehaviour
         // 否则，直接添加新的物品
         items.Add(item);
         showBagUI.ShowBag();
+        
+        //保存背包数据
+        InventoryManager.Instance.AddItemToInventory(item);
         return true;
     }
 
@@ -60,6 +63,8 @@ public class Inventory : MonoBehaviour
             items.Remove(item);
         }
         showBagUI.ShowBag();
+        //保存背包数据
+        InventoryManager.Instance.AddItemToInventory(item);
     }
 
     // 获取物品的数量

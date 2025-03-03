@@ -2,45 +2,45 @@
   "items": [
     {
       "id": 1,
-      "type": "DragonEgg",
-      "name": "dragonEgg_1",
+      "itemType": "DragonEgg",
+      "itemName": "dragonEgg_1",
       "description": "egg.",
       "icon": "dragonEgg_1",
       "isStackable": false,
-      "value": 50,
+      "quantity": 50,
       "incubationTime": 10,
-      "instantiateSucceed": 4
+      "hatchedDragonId": 4
     },
     {
       "id": 2,
-      "type": "DragonEgg",
-      "name": "dragonEgg_2",
+      "itemType": "DragonEgg",
+      "itemName": "dragonEgg_2",
       "description": "egg.",
       "icon": "dragonEgg_2",
       "isStackable": false,
-      "value": 30,
+      "quantity": 30,
       "incubationTime": 20,
-      "instantiateSucceed": 0
+      "hatchedDragonId": 0
     },
     {
       "id": 3,
-      "type": "DragonEgg",
-      "name": "dragonEgg_3",
+      "itemType": "DragonEgg",
+      "itemName": "dragonEgg_3",
       "description": "egg.",
       "icon": "dragonEgg_3",
       "isStackable": false,
-      "value": 1,
+      "quantity": 1,
       "incubationTime": 30,
-      "instantiateSucceed": 0
+      "hatchedDragonId": 0
     },
     {
       "id": 4,
-      "type": "Dragon",
-      "name": "dragon_1",
+      "itemType": "Dragon",
+      "itemName": "dragon_1",
       "description": "dragon.",
       "icon": "dragon_1",
       "isStackable": false,
-      "value": 200,
+      "quantity": 200,
       "health": 100,
       "attack": 10,
       "defense": 5

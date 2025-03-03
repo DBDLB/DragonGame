@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class ItemManager : MonoBehaviour
 {
-    public InstantiatePrefabData itemInstantiatePrefabData;  // 引用 ItemDatabase
+    // public InstantiatePrefabData itemInstantiatePrefabData;  // 引用 ItemDatabase
     private Dictionary<int, ItemData> itemDatabase = new Dictionary<int, ItemData>(); // 道具数据库
     
     public static ItemManager instance;
@@ -72,13 +72,14 @@ public class ItemManager : MonoBehaviour
         Item item = null;
         if (itemData != null)
         {
-            ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), itemData.type);
+            ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), itemData.itemType);
+            int itemID = Item.ItemIDGenerator.GetUniqueID(); // 获取唯一ID
             switch (itemType)
             {
                 case ItemType.DragonEgg:
                     // 实例化龙蛋
                     Sprite icon = Resources.Load<Sprite>("Icons/" + itemData.icon);
-                    DragonEgg dragonEgg = new DragonEgg(itemData.name,itemType,1,icon,bool.Parse(itemData.isStackable),itemData.incubationTime,itemData.instantiateSucceed);
+                    DragonEgg dragonEgg = new DragonEgg(itemData.itemName,itemType,1,icon,bool.Parse(itemData.isStackable),itemData.incubationTime,itemData.hatchedDragonId,itemData.id,itemID);
                     Inventory.Instance.AddItem(dragonEgg);
                     item = dragonEgg;
                     break;
@@ -88,14 +89,43 @@ public class ItemManager : MonoBehaviour
                 case ItemType.Dragon:
                     // 实例化龙
                     Sprite dragonIcon = Resources.Load<Sprite>("Icons/" + itemData.icon);
-                    Item dragon = new Dragon(itemData.name,itemType,1,dragonIcon,bool.Parse(itemData.isStackable),itemData.health,itemData.attack,itemData.defense);
+                    Item dragon = new Dragon(itemData.itemName,itemType,1,dragonIcon,bool.Parse(itemData.isStackable),itemData.health,itemData.attack,itemData.defense,itemData.id,itemID);
                     Inventory.Instance.AddItem(dragon);
                     item = dragon;
                     break;
                 default:
-                    Debug.LogWarning("Unknown item type: " + itemData.type);
+                    Debug.LogWarning("Unknown item type: " + itemData.itemType);
                     break;
             }
+        }
+        return item;
+    }
+    public Item InstantiateInventoryItem(InventoryManager.InventoryData inventoryData)
+    {
+        Item item = null;
+        ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), inventoryData.itemType);
+        switch (itemType)
+        {
+            case ItemType.DragonEgg:
+                // 实例化龙蛋
+                Sprite icon = Resources.Load<Sprite>("Icons/" + inventoryData.icon);
+                DragonEgg dragonEgg = new DragonEgg(inventoryData.itemName,itemType,inventoryData.quantity,icon,bool.Parse(inventoryData.isStackable),inventoryData.incubationTime,inventoryData.hatchedDragonId,inventoryData.id,inventoryData.itemID);
+                Inventory.Instance.AddItem(dragonEgg);
+                item = dragonEgg;
+                break;
+            case ItemType.Resource:
+                // 实例化资源
+                break;
+            case ItemType.Dragon:
+                // 实例化龙
+                Sprite dragonIcon = Resources.Load<Sprite>("Icons/" + inventoryData.icon);
+                Item dragon = new Dragon(inventoryData.itemName,itemType,inventoryData.quantity,dragonIcon,bool.Parse(inventoryData.isStackable),inventoryData.health,inventoryData.attack,inventoryData.defense,inventoryData.id,inventoryData.itemID);
+                Inventory.Instance.AddItem(dragon);
+                item = dragon;
+                break;
+            default:
+                Debug.LogWarning("Unknown item type: " + inventoryData.itemType);
+                break;
         }
         return item;
     }
@@ -112,16 +142,16 @@ public class ItemList
 public class ItemData
 {
     public int id;
-    public string name;
+    public string itemName;
     public string description;
     public string icon;
-    public string type;
+    public string itemType;
     public string isStackable; 
-    public int value;
+    public int quantity;
     
     //龙蛋
     public float incubationTime;
-    public int instantiateSucceed;
+    public int hatchedDragonId;
     
     //龙
     //生命

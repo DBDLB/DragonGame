@@ -1,0 +1,16 @@
+{
+  "inventoryDataList": [
+    {
+      "id": 4,
+      "itemType": "Dragon",
+      "itemName": "dragon_1",
+      "description": "dragon.",
+      "icon": "dragon_1",
+      "isStackable": false,
+      "quantity": 200,
+      "health": 100,
+      "attack": 10,
+      "defense": 5
+    }
+  ]
+}

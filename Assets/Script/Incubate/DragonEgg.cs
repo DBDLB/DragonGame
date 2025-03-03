@@ -21,7 +21,7 @@ public class DragonEgg : Item
     // 孵化完成后的龙（孵化完成后生成的龙）
     public int hatchedDragonId;
 
-    public DragonEgg(string name, ItemType type, int quantity, Sprite icon, bool stackable,float incubationTime,int hatchedDragonId) : base(name, type, quantity, icon, stackable)
+    public DragonEgg(string name, ItemType type, int quantity, Sprite icon, bool stackable,float incubationTime,int hatchedDragonId,int id,int itemID) : base(name, type, quantity, icon, stackable,id,itemID)
     {
         // 初始状态为未孵化
         status = EggStatus.NotStarted;
