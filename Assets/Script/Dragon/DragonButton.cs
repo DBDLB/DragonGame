@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class DragonButton : MonoBehaviour
+public class DragonButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public Dragon item;
     private void OnEnable()
@@ -15,7 +15,7 @@ public class DragonButton : MonoBehaviour
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // TooltipManager.Instance.ShowTooltip(itemDescription);
+        TooltipManager.Instance.ShowTooltip();
     }
 
     public void OnPointerExit(PointerEventData eventData)

@@ -7,6 +7,7 @@ public class TooltipManager : MonoBehaviour
     
     public GameObject tooltipPanel; // 提示框面板
     public Vector2 offset = new Vector2(10, -10); // 鼠标偏移量
+    private bool tooltipActive = false;
 
     private void Awake()
     {
@@ -17,15 +18,17 @@ public class TooltipManager : MonoBehaviour
     private void Update()
     {
         // 让提示框跟随鼠标
-        if (tooltipPanel.activeSelf)
+        if (tooltipPanel.activeSelf && tooltipActive)
         {
-            tooltipPanel.transform.position = Input.mousePosition + (Vector3)offset;
+            tooltipPanel.transform.position = Input.mousePosition + (Vector3)offset - (Vector3)tooltipPanel.GetComponent<RectTransform>().sizeDelta / 2;
+            tooltipActive = false;
         }
     }
 
-    public void ShowTooltip(string content)
+    public void ShowTooltip()
     {
         tooltipPanel.SetActive(true);
+        tooltipActive = true;
     }
 
     public void HideTooltip()
