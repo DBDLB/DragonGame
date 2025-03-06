@@ -15,7 +15,7 @@ public class DragonButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        TooltipManager.Instance.ShowTooltip();
+        TooltipManager.Instance.ShowTooltip(item);
     }
 
     public void OnPointerExit(PointerEventData eventData)

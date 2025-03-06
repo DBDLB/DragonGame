@@ -25,7 +25,7 @@ public class TooltipManager : MonoBehaviour
         }
     }
 
-    public void ShowTooltip()
+    public void ShowTooltip(Dragon item)
     {
         tooltipPanel.SetActive(true);
         tooltipActive = true;
