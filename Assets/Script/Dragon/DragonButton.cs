@@ -26,5 +26,6 @@ public class DragonButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private void OnClicked()
     {
         // ShowDragonAttribute.Instance.ShowDragonUI(item);
+        DispatchManager.Instance.selectedDragon = item;
     }
 }

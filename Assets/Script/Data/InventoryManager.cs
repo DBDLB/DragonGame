@@ -68,7 +68,8 @@ public class InventoryManager : MonoBehaviour
                         quantity = item.quantity,
                         health = dragon.health,
                         attack = dragon.attack,
-                        defense = dragon.defense
+                        defense = dragon.defense,
+                        speed = dragon.speed
                     };
                     inventorySaveDataList.Add(inventoryData1);
                     break;
@@ -155,6 +156,8 @@ public class InventoryManager : MonoBehaviour
         public int attack;
         //防御力
         public int defense;
+        //速度
+        public int speed;
     }
     
     

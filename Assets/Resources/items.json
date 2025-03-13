@@ -43,7 +43,8 @@
       "quantity": 200,
       "health": 100,
       "attack": 10,
-      "defense": 5
+      "defense": 5,
+      "speed": 5
     }
   ]
 }

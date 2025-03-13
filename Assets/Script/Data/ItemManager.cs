@@ -89,7 +89,7 @@ public class ItemManager : MonoBehaviour
                 case ItemType.Dragon:
                     // 实例化龙
                     Sprite dragonIcon = Resources.Load<Sprite>("Icons/" + itemData.icon);
-                    Item dragon = new Dragon(itemData.itemName,itemType,1,dragonIcon,bool.Parse(itemData.isStackable),itemData.health,itemData.attack,itemData.defense,itemData.id,itemID);
+                    Item dragon = new Dragon(itemData.itemName,itemType,1,dragonIcon,bool.Parse(itemData.isStackable),itemData.health,itemData.attack,itemData.defense,itemData.speed,itemData.id,itemID);
                     Inventory.Instance.AddItem(dragon);
                     item = dragon;
                     break;
@@ -119,7 +119,7 @@ public class ItemManager : MonoBehaviour
             case ItemType.Dragon:
                 // 实例化龙
                 Sprite dragonIcon = Resources.Load<Sprite>("Icons/" + inventoryData.icon);
-                Item dragon = new Dragon(inventoryData.itemName,itemType,inventoryData.quantity,dragonIcon,bool.Parse(inventoryData.isStackable),inventoryData.health,inventoryData.attack,inventoryData.defense,inventoryData.id,inventoryData.itemID);
+                Item dragon = new Dragon(inventoryData.itemName,itemType,inventoryData.quantity,dragonIcon,bool.Parse(inventoryData.isStackable),inventoryData.health,inventoryData.attack,inventoryData.defense,inventoryData.speed,inventoryData.id,inventoryData.itemID);
                 Inventory.Instance.AddItem(dragon);
                 item = dragon;
                 break;
@@ -160,5 +160,7 @@ public class ItemData
     public int attack;
     //防御力
     public int defense;
+    //速度
+    public int speed;
    
 }
