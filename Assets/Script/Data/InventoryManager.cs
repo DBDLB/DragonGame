@@ -124,6 +124,18 @@ public class InventoryManager : MonoBehaviour
     // 玩家获得物品并保存
     public void AddItemToInventory(Item item)
     {
+        // 检查是否首次获得此种类物品
+        bool isFirstTimeGetting = PlayerDataManager.Instance.IsNewDiscovery(item.id);
+    
+        if (isFirstTimeGetting)
+        {
+            // 记录新获得的物品种类
+            PlayerDataManager.Instance.MarkItemDiscovered(item.id);
+        
+            // 这里可以添加首次获得物品的特殊效果
+            Debug.Log("首次获得：" + item.itemName + "！");
+            // 比如显示提示界面、播放特效等
+        }
         // itemList.items.Add(item);
         SaveInventory();  // 每次修改物品后保存
     }

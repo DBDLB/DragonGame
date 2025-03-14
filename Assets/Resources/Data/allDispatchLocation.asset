@@ -24,4 +24,4 @@ MonoBehaviour:
   - id: 3
     locationName: Location_C
     baseValue: 400
-    baseTime: 15
+    baseTime: 100

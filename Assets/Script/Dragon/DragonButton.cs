@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -27,5 +28,7 @@ public class DragonButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         // ShowDragonAttribute.Instance.ShowDragonUI(item);
         DispatchManager.Instance.selectedDragon = item;
+        DispatchManager.Instance.dragonImage.sprite = item.icon;
+        DispatchManager.Instance.dragonImage.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "龙出行中";
     }
 }

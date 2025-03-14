@@ -15,5 +15,6 @@ public class DispatchLocationButton : MonoBehaviour
     {
         // ShowDragonAttribute.Instance.ShowDragonUI(item);
         DispatchManager.Instance.locationID = locationID;
+        DispatchManager.Instance.locationImage.sprite = GetComponentInChildren<Image>().sprite;
     }
 }
