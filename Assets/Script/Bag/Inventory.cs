@@ -34,17 +34,17 @@ public class Inventory : MonoBehaviour
         // if (items.Count >= maxSlots) return false;
 
         // 如果物品可以堆叠且背包已有该物品
-        if (item.isStackable)
-        {
-            foreach (var existingItem in items)
-            {
-                if (existingItem.itemName == item.itemName)
-                {
-                    existingItem.AddQuantity(item.quantity);
-                    return true;
-                }
-            }
-        }
+        // if (item.isStackable)
+        // {
+        //     foreach (var existingItem in items)
+        //     {
+        //         if (existingItem.itemName == item.itemName)
+        //         {
+        //             existingItem.AddQuantity(item.quantity);
+        //             return true;
+        //         }
+        //     }
+        // }
 
         // 否则，直接添加新的物品
         items.Add(item);

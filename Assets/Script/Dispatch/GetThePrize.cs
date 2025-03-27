@@ -56,7 +56,7 @@ public class GetThePrize : MonoBehaviour
             {
                 resultText.text = "Selected ID: " + selectedID;
             }
-            ItemManager.Instance.InstantiateItem(selectedID);
+            ItemManager.Instance.InstantiateItem(selectedID,ItemType.SpoilsOfWar);
 
             progressBar.value = 0;
         }

@@ -2,11 +2,15 @@ using System;
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 public class ItemManager : MonoBehaviour
 {
     // public InstantiatePrefabData itemInstantiatePrefabData;  // 引用 ItemDatabase
-    private Dictionary<int, ItemData> itemDatabase = new Dictionary<int, ItemData>(); // 道具数据库
+    // 为每种物品类型创建单独的字典
+    private Dictionary<int, DragonEggData> dragonEggDatabase = new Dictionary<int, DragonEggData>();
+    private Dictionary<int, DragonData> dragonDatabase = new Dictionary<int, DragonData>();
+    private Dictionary<int, SpoilsOfWarData> spoilsOfWarDatabase = new Dictionary<int, SpoilsOfWarData>();
     
     public static ItemManager instance;
     public static ItemManager Instance
@@ -34,133 +38,252 @@ public class ItemManager : MonoBehaviour
     // 从 JSON 文件加载道具配置
     void LoadItems()
     {
-        string filePath = "items";  // JSON 文件路径
-        TextAsset jsonText = Resources.Load<TextAsset>(filePath);  // JSON 文件路径
+        // 加载龙蛋数据
+        LoadDragonEggData();
+        
+        // 加载龙数据
+        LoadDragonData();
+        
+        // 加载战利品数据
+        LoadSpoilsOfWarData();
+    }
+    
+    // 加载龙蛋数据
+    void LoadDragonEggData()
+    {
+        string filePath = "Data/dragonEggData";  // 龙蛋JSON文件
+        TextAsset jsonText = Resources.Load<TextAsset>(filePath);
+    if (jsonText)
+    {
+        DragonEggData[] itemArray = JsonConvert.DeserializeObject<DragonEggData[]>(jsonText.ToString());
+        if (itemArray != null)
+        {
+            foreach (var item in itemArray)
+            {
+                dragonEggDatabase.Add(item.id, item);
+            }
+        }
+    }
+        else
+        {
+            Debug.LogError("Dragon Egg JSON file not found at: " + filePath);
+        }
+    }
+
+    // 加载龙数据
+    void LoadDragonData()
+    {
+        string filePath = "Data/dragonData";  // 龙JSON文件
+        TextAsset jsonText = Resources.Load<TextAsset>(filePath);
         if (jsonText)
         {
-            ItemList itemList = JsonUtility.FromJson<ItemList>(jsonText.ToString());  // 将 JSON 解析为 ItemList
-
-            foreach (var item in itemList.items)
+            DragonData[] itemArray = JsonConvert.DeserializeObject<DragonData[]>(jsonText.ToString());
+            foreach (var item in itemArray)
             {
-                itemDatabase.Add(item.id, item);  // 将道具信息加入字典
+                dragonDatabase.Add(item.id, item);
             }
         }
         else
         {
-            Debug.LogError("Items JSON file not found at: " + filePath);
+            Debug.LogError("Dragon JSON file not found at: " + filePath);
         }
     }
 
-    // 根据道具ID获取道具数据
-    public ItemData GetItemByID(int id)
+    // 加载战利品数据
+    void LoadSpoilsOfWarData()
     {
-        if (itemDatabase.ContainsKey(id))
+        string filePath = "Data/spoilsOfWarData";  // 战利品JSON文件
+        TextAsset jsonText = Resources.Load<TextAsset>(filePath);
+        if (jsonText)
         {
-            return itemDatabase[id];
+            SpoilsOfWarData[] itemArray = JsonConvert.DeserializeObject<SpoilsOfWarData[]>(jsonText.ToString());
+            foreach (var item in itemArray)
+            {
+                spoilsOfWarDatabase.Add(item.id, item);
+            }
         }
         else
         {
-            Debug.LogWarning("Item with ID " + id + " not found!");
-            return null;
+            Debug.LogError("Spoils of War JSON file not found at: " + filePath);
         }
     }
 
-    // 实例化道具
-    public Item InstantiateItem(int id)
+// 根据道具ID和类型获取道具数据
+    public object GetItemByID(int id, ItemType itemType)
     {
-        ItemData itemData = GetItemByID(id);
-        Item item = null;
-        if (itemData != null)
-        {
-            ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), itemData.itemType);
-            int itemID = Item.ItemIDGenerator.GetUniqueID(); // 获取唯一ID
-            switch (itemType)
-            {
-                case ItemType.DragonEgg:
-                    // 实例化龙蛋
-                    Sprite icon = Resources.Load<Sprite>("Icons/" + itemData.icon);
-                    DragonEgg dragonEgg = new DragonEgg(itemData.itemName,itemType,1,icon,bool.Parse(itemData.isStackable),itemData.incubationTime,itemData.hatchedDragonId,itemData.id,itemID);
-                    Inventory.Instance.AddItem(dragonEgg);
-                    item = dragonEgg;
-                    break;
-                case ItemType.Resource:
-                    // 实例化资源
-                    break;
-                case ItemType.Dragon:
-                    // 实例化龙
-                    Sprite dragonIcon = Resources.Load<Sprite>("Icons/" + itemData.icon);
-                    Item dragon = new Dragon(itemData.itemName,itemType,1,dragonIcon,bool.Parse(itemData.isStackable),itemData.health,itemData.attack,itemData.defense,itemData.speed,itemData.id,itemID);
-                    Inventory.Instance.AddItem(dragon);
-                    item = dragon;
-                    break;
-                default:
-                    Debug.LogWarning("Unknown item type: " + itemData.itemType);
-                    break;
-            }
-        }
-        return item;
-    }
-    public Item InstantiateInventoryItem(InventoryManager.InventoryData inventoryData)
-    {
-        Item item = null;
-        ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), inventoryData.itemType);
         switch (itemType)
         {
             case ItemType.DragonEgg:
-                // 实例化龙蛋
-                Sprite icon = Resources.Load<Sprite>("Icons/" + inventoryData.icon);
-                DragonEgg dragonEgg = new DragonEgg(inventoryData.itemName,itemType,inventoryData.quantity,icon,bool.Parse(inventoryData.isStackable),inventoryData.incubationTime,inventoryData.hatchedDragonId,inventoryData.id,inventoryData.itemID);
-                Inventory.Instance.AddItem(dragonEgg);
-                item = dragonEgg;
-                break;
-            case ItemType.Resource:
-                // 实例化资源
+                if (dragonEggDatabase.ContainsKey(id))
+                    return dragonEggDatabase[id];
                 break;
             case ItemType.Dragon:
-                // 实例化龙
-                Sprite dragonIcon = Resources.Load<Sprite>("Icons/" + inventoryData.icon);
-                Item dragon = new Dragon(inventoryData.itemName,itemType,inventoryData.quantity,dragonIcon,bool.Parse(inventoryData.isStackable),inventoryData.health,inventoryData.attack,inventoryData.defense,inventoryData.speed,inventoryData.id,inventoryData.itemID);
-                Inventory.Instance.AddItem(dragon);
-                item = dragon;
+                if (dragonDatabase.ContainsKey(id))
+                    return dragonDatabase[id];
+                break;
+            case ItemType.SpoilsOfWar:
+                if (spoilsOfWarDatabase.ContainsKey(id))
+                    return spoilsOfWarDatabase[id];
+                break;
+        }
+        Debug.LogWarning($"Item with ID {id} and type {itemType} not found!");
+        return null;
+    }
+
+    // 实例化道具
+    public Item InstantiateItem(int id, ItemType type)
+    {
+        Item item = null;
+        switch (type)
+        {
+            case ItemType.DragonEgg:
+                DragonEggData dragonEggData = (DragonEggData)GetItemByID(id, type);
+                if (dragonEggData != null)
+                {
+                    Sprite icon = Resources.Load<Sprite>("Icons/" + dragonEggData.icon);
+                    List<Vector2> hatchedDragons = new List<Vector2> { dragonEggData.bornDragonA, dragonEggData.bornDragonB };
+                    DragonEgg dragonEgg = new DragonEgg(dragonEggData.itemName,type,1,icon,dragonEggData.eggBornTime,hatchedDragons,dragonEggData.id,Item.ItemIDGenerator.GetUniqueID(),dragonEggData.description,dragonEggData.eggModelAdress,dragonEggData.eggPrice);
+                    Inventory.Instance.AddItem(dragonEgg);
+                    item = dragonEgg;
+                }
+                break;
+            case ItemType.Dragon:
+                DragonData dragonData = (DragonData)GetItemByID(id, type);
+                if (dragonData != null)
+                {
+                    Sprite icon = Resources.Load<Sprite>("Icons/" + dragonData.icon);
+                    Item dragon = new Dragon(dragonData.itemName,type,1,icon,dragonData.life,dragonData.attack,dragonData.defense,dragonData.speed,dragonData.id,Item.ItemIDGenerator.GetUniqueID(),dragonData.description,dragonData.dragonModelAdress);
+                    Inventory.Instance.AddItem(dragon);
+                    item = dragon;
+                }
+                break;
+            case ItemType.SpoilsOfWar:
+                SpoilsOfWarData spoilsOfWarData = (SpoilsOfWarData)GetItemByID(id, type);
+                if (spoilsOfWarData != null)
+                {
+                    Sprite icon = Resources.Load<Sprite>("Icons/" + spoilsOfWarData.icon);
+                    // 实例化资源
+                }
                 break;
             default:
-                Debug.LogWarning("Unknown item type: " + inventoryData.itemType);
+                Debug.LogWarning("Unknown item type: " + type);
                 break;
         }
         return item;
     }
 }
 
-// 用于解析 JSON 数据的辅助类
+// 分别定义各类型数据结构
 [System.Serializable]
-public class ItemList
+public class DragonEggData
 {
-    public ItemData[] items;
+    //通用属性
+    public int id;
+    public string itemName;
+    public string icon;
+    public string description;
+    
+    // 龙蛋特有属性
+    public string eggModelAdress;
+    public float eggBornTime;
+    public float eggPrice;
+    public string bornDragonAString;
+    public string bornDragonBString;
+    
+    public DragonEggData(int id, string itemName, string icon, string description, string eggModelAdress, float eggBornTime, float eggPrice, Vector2 bornDragonA, Vector2 bornDragonB)
+    {
+        this.id = id;
+        this.itemName = itemName;
+        this.icon = icon;
+        this.description = description;
+        this.eggModelAdress = eggModelAdress;
+        this.eggBornTime = eggBornTime;
+        this.eggPrice = eggPrice;
+        this.bornDragonA = bornDragonA;
+        this.bornDragonB = bornDragonB;
+    }
+    
+    // 不序列化的Vector2属性
+    [JsonIgnore]
+    public Vector2 bornDragonA 
+    {
+        get { return StringToVector2(bornDragonAString); }
+        set { bornDragonAString = Vector2ToString(value); }
+    }
+    
+    [JsonIgnore]
+    public Vector2 bornDragonB
+    {
+        get { return StringToVector2(bornDragonBString); }
+        set { bornDragonBString = Vector2ToString(value); }
+    }
+    
+    // 辅助方法：将字符串转换为Vector2
+    private Vector2 StringToVector2(string vectorString)
+    {
+        if (string.IsNullOrEmpty(vectorString))
+            return Vector2.zero;
+            
+        string[] values = vectorString.Split(',');
+        if (values.Length != 2)
+            return Vector2.zero;
+            
+        float x, y;
+        if (float.TryParse(values[0], out x) && float.TryParse(values[1], out y))
+            return new Vector2(x, y);
+            
+        return Vector2.zero;
+    }
+    
+    // 辅助方法：将Vector2转换为字符串
+    private string Vector2ToString(Vector2 vector)
+    {
+        return vector.x + "," + vector.y;
+    }
 }
 
 [System.Serializable]
-public class ItemData
+public class DragonData
 {
+    //通用属性
     public int id;
     public string itemName;
-    public string description;
     public string icon;
-    public string itemType;
-    public string isStackable; 
-    public int quantity;
+    public string description;
     
-    //龙蛋
-    public float incubationTime;
-    public int hatchedDragonId;
-    
-    //龙
-    //生命
-    public int health;
-    //攻击力
-    public int attack;
-    //防御力
+    // 龙特有属性
+    public string dragonModelAdress;
+    public int life;
     public int defense;
-    //速度
+    public int attack;
     public int speed;
-   
+    
+    public DragonData(int id, string itemName, string icon, string description, string dragonModelAdress, int life, int defense, int attack, int speed)
+    {
+        this.id = id;
+        this.itemName = itemName;
+        this.icon = icon;
+        this.description = description;
+        this.dragonModelAdress = dragonModelAdress;
+        this.life = life;
+        this.defense = defense;
+        this.attack = attack;
+        this.speed = speed;
+    }
+}
+
+[System.Serializable]
+public class SpoilsOfWarData
+{
+    //通用属性
+    public int id;
+    public string itemName;
+    public string icon;
+    public string description;
+    
+    // 战利品特有属性
+    public string isStackable;
+    // 战利品特有属性
+    public int value;
+    // 其他战利品特有属性...
 }

@@ -1,0 +1,51 @@
+[
+    {
+      "id": 1,
+      "itemName": "dragon_1",
+      "description": "dragon.",
+      "icon": "dragon_1",
+      "dragonModelAdress": "Prefabs/Dragon",
+      "quantity": 200,
+      "health": 100,
+      "attack": 10,
+      "defense": 5,
+      "speed": 5
+    },
+    {
+      "id": 2,
+      "itemName": "dragon_2",
+      "description": "dragon.",
+      "icon": "dragon_1",
+      "dragonModelAdress": "Prefabs/Dragon",
+      "quantity": 200,
+      "health": 100,
+      "attack": 10,
+      "defense": 5,
+      "speed": 5
+    },
+    {
+      "id": 3,
+      "itemName": "dragon_3",
+      "description": "dragon.",
+      "icon": "dragon_1",
+      "dragonModelAdress": "Prefabs/Dragon",
+      "quantity": 200,
+      "health": 100,
+      "attack": 10,
+      "defense": 5,
+      "speed": 5
+    },
+    {
+      "id": 4,
+      "itemName": "dragon_4",
+      "description": "dragon.",
+      "icon": "dragon_1",
+      "dragonModelAdress": "Prefabs/Dragon",
+      "quantity": 200,
+      "health": 100,
+      "attack": 10,
+      "defense": 5,
+      "speed": 5
+    }
+]
+

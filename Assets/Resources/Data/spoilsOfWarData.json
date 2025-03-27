@@ -1,8 +1,6 @@
-{
-  "items": [
+[
     {
       "id": 1,
-      "itemType": "DragonEgg",
       "itemName": "dragonEgg_1",
       "description": "egg.",
       "icon": "dragonEgg_1",
@@ -13,7 +11,6 @@
     },
     {
       "id": 2,
-      "itemType": "DragonEgg",
       "itemName": "dragonEgg_2",
       "description": "egg.",
       "icon": "dragonEgg_2",
@@ -24,7 +21,6 @@
     },
     {
       "id": 3,
-      "itemType": "DragonEgg",
       "itemName": "dragonEgg_3",
       "description": "egg.",
       "icon": "dragonEgg_3",
@@ -35,7 +31,6 @@
     },
     {
       "id": 4,
-      "itemType": "Dragon",
       "itemName": "dragon_1",
       "description": "dragon.",
       "icon": "dragon_1",
@@ -46,5 +41,4 @@
       "defense": 5,
       "speed": 5
     }
-  ]
-}
+]

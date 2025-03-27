@@ -2,9 +2,9 @@ using UnityEngine;
 
 public enum ItemType
 {
-    DragonEgg,
-    Resource,
-    Dragon
+    DragonEgg,//龙蛋
+    SpoilsOfWar,//战利品
+    Dragon //龙
 }
 
 [System.Serializable]
@@ -14,17 +14,16 @@ public class Item
     public ItemType itemType;     // 物品类型
     public int quantity;          // 物品数量
     public Sprite icon;           // 物品图标
-    public bool isStackable;      // 是否可以堆叠
     public int itemID;           // 物品ID（唯一标识）
     public int id;                // 物品种类ID
+    public string description;    // 物品描述
 
-    public Item(string name, ItemType type, int quantity, Sprite icon, bool stackable,int id,int itemID)
+    public Item(string name, ItemType type, int quantity, Sprite icon,int id,int itemID, string description)
     {
         itemName = name;
         itemType = type;
         this.quantity = quantity;
         this.icon = icon;
-        isStackable = stackable;
         this.itemID = itemID;
         this.id = id;
     }

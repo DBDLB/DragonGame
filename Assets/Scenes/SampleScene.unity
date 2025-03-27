@@ -5534,9 +5534,10 @@ MonoBehaviour:
     itemType: 0
     quantity: 0
     icon: {fileID: 0}
-    isStackable: 0
     itemID: 0
     id: 0
+    description: 
+    dragonModelAdress: 
     health: 0
     attack: 0
     speed: 0

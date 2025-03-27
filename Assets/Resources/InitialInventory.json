@@ -1,16 +1,48 @@
 {
-  "inventoryDataList": [
+  "inventoryDragonEggs": [
     {
-      "id": 4,
-      "itemType": "Dragon",
-      "itemName": "dragon_1",
-      "description": "dragon.",
-      "icon": "dragon_1",
-      "isStackable": false,
-      "quantity": 200,
-      "health": 100,
-      "attack": 10,
-      "defense": 5
+      "quantity": 1,
+      "dragonEggs": {
+        "id": 1,
+        "itemName": "dragonEgg_1",
+        "icon": "dragonEgg_1",
+        "description": "egg.",
+        "eggModelAdress": "Prefabs/DragonEgg",
+        "eggBornTime": 10,
+        "eggPrice": 100,
+        "bornDragonAString": "1,2",
+        "bornDragonBString": "3,1.5"
+      }
+    },
+    {
+      "quantity": 1,
+      "dragonEggs": {
+        "id": 2,
+        "itemName": "dragonEgg_2",
+        "icon": "dragonEgg_2",
+        "description": "egg.",
+        "eggModelAdress": "Prefabs/DragonEgg",
+        "eggBornTime": 20,
+        "eggPrice": 200,
+        "bornDragonAString": "2,3",
+        "bornDragonBString": "4,2"
+      }
+    },
+    {
+      "quantity": 1,
+      "dragonEggs": {
+        "id": 3,
+        "itemName": "dragonEgg_3",
+        "icon": "dragonEgg_3",
+        "description": "egg.",
+        "eggModelAdress": "Prefabs/DragonEgg",
+        "eggBornTime": 30,
+        "eggPrice": 300,
+        "bornDragonAString": "3,4",
+        "bornDragonBString": "5,2.5"
+      }
     }
-  ]
+  ],
+  "inventoryDragons": [],
+  "inventorySpoilsOfWar": []
 }

@@ -34,51 +34,64 @@ public class InventoryManager : MonoBehaviour
     // 保存背包数据到 JSON 文件
     public void SaveInventory()
     {
-        List<InventoryData> inventorySaveDataList = new List<InventoryData>();
+        List<InventoryDragonEggData> dragonEggsList = new List<InventoryDragonEggData>();
+        List<InventoryDragonData> dragonsList = new List<InventoryDragonData>();
+        List<InventorySpoilsOfWarData> spoilsList = new List<InventorySpoilsOfWarData>();
+
         foreach (var item in Inventory.Instance.items)
         {
             switch (item.itemType)
             {
                 case ItemType.DragonEgg:
                     DragonEgg dragonEgg = item as DragonEgg;
-                    InventoryData inventoryData = new InventoryData
-                    {
-                        id = item.id,
-                        itemID = item.itemID,
-                        itemName = item.itemName,
-                        icon = item.icon.name,
-                        itemType = item.itemType.ToString(),
-                        isStackable = item.isStackable.ToString(),
-                        quantity = item.quantity,
-                        incubationTime = dragonEgg.incubationTime,
-                        hatchedDragonId = dragonEgg.hatchedDragonId
-                    };
-                    inventorySaveDataList.Add(inventoryData);
+                    DragonEggData eggData = new DragonEggData
+                    (
+                        item.id,
+                        item.itemName,
+                        item.icon.name,
+                        dragonEgg.description,
+                        
+                        // description = dragonEgg.description,
+                        // isStackable = item.isStackable.ToString(),
+                        dragonEgg.eggModelAdress,
+                        dragonEgg.eggBornTime,
+                        dragonEgg.eggPrice,
+                        dragonEgg.hatchedDragons[0],
+                        dragonEgg.hatchedDragons[1]
+                        );
+                    dragonEggsList.Add(new InventoryDragonEggData() {itemID = item.itemID, quantity = item.quantity,dragonEggs = eggData});
                     break;
+                
                 case ItemType.Dragon:
                     Dragon dragon = item as Dragon;
-                    InventoryData inventoryData1 = new InventoryData
-                    {
-                        id = item.id,
-                        itemID = item.itemID,
-                        itemName = item.itemName,
-                        icon = item.icon.name,
-                        itemType = item.itemType.ToString(),
-                        isStackable = item.isStackable.ToString(),
-                        quantity = item.quantity,
-                        health = dragon.health,
-                        attack = dragon.attack,
-                        defense = dragon.defense,
-                        speed = dragon.speed
-                    };
-                    inventorySaveDataList.Add(inventoryData1);
+                    DragonData dragonData = new DragonData
+                    (
+                        item.id,
+                        item.itemName,
+                        item.icon.name,
+                        dragon.description,
+                        // isStackable = item.isStackable.ToString(),
+                        
+                        dragon.dragonModelAdress,
+                        dragon.health,
+                        dragon.attack,
+                        dragon.defense,
+                        dragon.speed
+                    );
+                    dragonsList.Add(new InventoryDragonData() {itemID = item.itemID, quantity = item.quantity,dragons = dragonData});
+                    break;
+                
+                case ItemType.SpoilsOfWar:
+                    // 类似实现战利品数据保存
                     break;
             }
         }
         
         InventoryDataList inventoryDataList = new InventoryDataList
         {
-            inventoryDataList = inventorySaveDataList.ToArray()
+            inventoryDragonEggs = dragonEggsList.ToArray(),
+            inventoryDragons = dragonsList.ToArray(),
+            inventorySpoilsOfWar = spoilsList.ToArray()
         };
         string json = JsonUtility.ToJson(inventoryDataList, true);  // 将背包对象序列化为 JSON 字符串
         File.WriteAllText(filePath, json);  // 写入文件
@@ -90,16 +103,67 @@ public class InventoryManager : MonoBehaviour
     {
         if (File.Exists(filePath))
         {
-            string json = File.ReadAllText(filePath);  // 读取 JSON 字符串
-            InventoryDataList inventoryDataList = JsonUtility.FromJson<InventoryDataList>(json);  // 反序列化 JSON 字符串为 Inventory 对象
-            if(inventoryDataList.inventoryDataList != null)
+            string json = File.ReadAllText(filePath);
+            InventoryDataList inventoryData = JsonUtility.FromJson<InventoryDataList>(json);
+        
+            // 清空当前背包
+            Inventory.Instance.items.Clear();
+        
+            // 加载龙蛋
+            if (inventoryData.inventoryDragonEggs != null)
             {
-                foreach (var item in inventoryDataList.inventoryDataList)
+                foreach (var eggData in inventoryData.inventoryDragonEggs)
                 {
-                    ItemManager.Instance.InstantiateInventoryItem(item);
+                    Sprite icon = Resources.Load<Sprite>("Icons/" + eggData.dragonEggs.icon);
+                    List<Vector2> hatchedDragons = new List<Vector2> { eggData.dragonEggs.bornDragonA, eggData.dragonEggs.bornDragonB };
+                    DragonEgg egg = new DragonEgg(
+                        eggData.dragonEggs.itemName, 
+                        ItemType.DragonEgg, 
+                        1, 
+                        icon, 
+                        // bool.Parse(eggData.isStackable), 
+                        eggData.dragonEggs.eggBornTime, 
+                        hatchedDragons, 
+                        eggData.dragonEggs.id, 
+                        eggData.itemID,
+                        eggData.dragonEggs.description,
+                        eggData.dragonEggs.eggModelAdress,
+                        eggData.dragonEggs.eggPrice
+                    );
+                    egg.quantity = eggData.quantity;
+                    Inventory.Instance.AddItem(egg);
                 }
             }
-            Debug.Log("Inventory loaded.");
+        
+            // 加载龙
+            if (inventoryData.inventoryDragons != null)
+            {
+                foreach (var dragonData in inventoryData.inventoryDragons)
+                {
+                    Sprite icon = Resources.Load<Sprite>("Icons/" + dragonData.dragons.icon);
+                    Dragon dragon = new Dragon(
+                        dragonData.dragons.itemName,
+                        ItemType.Dragon,
+                        1,
+                        icon,
+                        // bool.Parse(dragonData.isStackable),
+                        dragonData.dragons.life,
+                        dragonData.dragons.attack,
+                        dragonData.dragons.defense,
+                        dragonData.dragons.speed,
+                        dragonData.dragons.id,
+                        dragonData.itemID,
+                        dragonData.dragons.description,
+                        dragonData.dragons.dragonModelAdress
+                    );
+                    dragon.quantity = dragonData.quantity;
+                    Inventory.Instance.AddItem(dragon);
+                }
+            }
+        
+            // 加载战利品...
+        
+            Debug.Log("背包数据已加载");
         }
         else
         {
@@ -109,11 +173,58 @@ public class InventoryManager : MonoBehaviour
             if (defaultItems)
             {
                 InventoryDataList inventoryDataList = JsonUtility.FromJson<InventoryDataList>(defaultItems.ToString());  // 将 JSON 解析为 ItemList
-                foreach (var item in inventoryDataList.inventoryDataList)
+                // 加载龙蛋
+                if (inventoryDataList.inventoryDragonEggs != null)
                 {
-                    item.itemID = Item.ItemIDGenerator.GetUniqueID();  // 获取唯一ID
-                    ItemManager.Instance.InstantiateInventoryItem(item);
+                    foreach (var eggData in inventoryDataList.inventoryDragonEggs)
+                    {
+                        Sprite icon = Resources.Load<Sprite>("Icons/" + eggData.dragonEggs.icon);
+                        List<Vector2> hatchedDragons = new List<Vector2> { eggData.dragonEggs.bornDragonA, eggData.dragonEggs.bornDragonB };
+                        DragonEgg egg = new DragonEgg(
+                            eggData.dragonEggs.itemName, 
+                            ItemType.DragonEgg, 
+                            1, 
+                            icon, 
+                            // bool.Parse(eggData.isStackable), 
+                            eggData.dragonEggs.eggBornTime, 
+                            hatchedDragons, 
+                            eggData.dragonEggs.id, 
+                            Item.ItemIDGenerator.GetUniqueID(),
+                            eggData.dragonEggs.description,
+                            eggData.dragonEggs.eggModelAdress,
+                            eggData.dragonEggs.eggPrice
+                        );
+                        egg.quantity = eggData.quantity;
+                        Inventory.Instance.AddItem(egg);
+                    }
                 }
+                // 加载龙
+                if (inventoryDataList.inventoryDragons != null)
+                {
+                    foreach (var dragonData in inventoryDataList.inventoryDragons)
+                    {
+                        Sprite icon = Resources.Load<Sprite>("Icons/" + dragonData.dragons.icon);
+                        Dragon dragon = new Dragon(
+                            dragonData.dragons.itemName,
+                            ItemType.Dragon,
+                            1,
+                            icon,
+                            // bool.Parse(dragonData.isStackable),
+                            dragonData.dragons.life,
+                            dragonData.dragons.attack,
+                            dragonData.dragons.defense,
+                            dragonData.dragons.speed,
+                            dragonData.dragons.id,
+                            Item.ItemIDGenerator.GetUniqueID(),
+                            dragonData.dragons.description,
+                            dragonData.dragons.dragonModelAdress
+                        );
+                        dragon.quantity = dragonData.quantity;
+                        Inventory.Instance.AddItem(dragon);
+                    }
+                }
+                // 加载战利品...
+                Debug.Log("背包数据已加载");
             }
             // itemList = JsonUtility.FromJson<ItemList>(defaultItems.text);
             // // ItemManager.Instance.LoadItems(
@@ -125,12 +236,12 @@ public class InventoryManager : MonoBehaviour
     public void AddItemToInventory(Item item)
     {
         // 检查是否首次获得此种类物品
-        bool isFirstTimeGetting = PlayerDataManager.Instance.IsNewDiscovery(item.id);
+        bool isFirstTimeGetting = PlayerDataManager.Instance.IsNewDiscovery(item.id, item.itemType);
     
         if (isFirstTimeGetting)
         {
             // 记录新获得的物品种类
-            PlayerDataManager.Instance.MarkItemDiscovered(item.id);
+            PlayerDataManager.Instance.MarkItemDiscovered(item.id, item.itemType);
         
             // 这里可以添加首次获得物品的特殊效果
             Debug.Log("首次获得：" + item.itemName + "！");
@@ -143,34 +254,62 @@ public class InventoryManager : MonoBehaviour
     [System.Serializable]
     public class InventoryDataList
     {   
-        public InventoryData[] inventoryDataList;
+        public InventoryDragonEggData[] inventoryDragonEggs;
+        public InventoryDragonData[] inventoryDragons;
+        public InventorySpoilsOfWarData[] inventorySpoilsOfWar;
     }
+
     [System.Serializable]
-    public class InventoryData
+    public class InventoryDragonEggData
     {
-        public int id;
         public int itemID;
-        public string itemName;
-        public string description;
-        public string icon;
-        public string itemType;
-        public string isStackable; 
         public int quantity;
-    
-        //龙蛋
-        public float incubationTime;
-        public int hatchedDragonId;
-    
-        //龙
-        //生命
-        public int health;
-        //攻击力
-        public int attack;
-        //防御力
-        public int defense;
-        //速度
-        public int speed;
+        public DragonEggData dragonEggs;
     }
+    
+    [System.Serializable]
+    public class InventoryDragonData
+    {
+        public int itemID;
+        public int quantity;
+        public DragonData dragons;
+    }
+    
+    [System.Serializable]
+    public class InventorySpoilsOfWarData
+    {
+        public int itemID;
+        public int quantity;
+        public SpoilsOfWarData spoilsOfWar;
+    }
+    
+    
+    // [System.Serializable]
+    // public class InventoryData
+    // {
+    //     public int id;
+    //     public int itemID;
+    //     public string itemName;
+    //     public string description;
+    //     public string icon;
+    //     public string itemType;
+    //     public string isStackable; 
+    //     public int quantity;
+    //
+    //     //龙蛋
+    //     public float eggBornTime;
+    //     public int hatchedDragonId;
+    //
+    //     //龙
+    //     //生命
+    //     public int health;
+    //     //攻击力
+    //     public int attack;
+    //     //防御力
+    //     public int defense;
+    //     //速度
+    //     public int speed;
+    // }
     
     
 }

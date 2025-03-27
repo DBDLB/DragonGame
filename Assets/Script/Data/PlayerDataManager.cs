@@ -24,7 +24,8 @@ public class PlayerDataManager : MonoBehaviour
     }
 
     // 玩家已获得过的物品种类ID列表(使用id而非itemID，因为id代表物品种类)
-    private HashSet<int> discoveredItems = new HashSet<int>();
+    // 新增存储物品类型和ID的集合
+    private List<ItemDiscoveryInfo> itemDiscoveryList = new List<ItemDiscoveryInfo>();
     private string saveFilePath;
 
     private void Awake()
@@ -34,31 +35,38 @@ public class PlayerDataManager : MonoBehaviour
     }
 
     // 检查物品是否为首次获得
-    public bool IsNewDiscovery(int itemId)
+    public bool IsNewDiscovery(int itemId, ItemType itemType)
     {
-        return !discoveredItems.Contains(itemId);
+        return !itemDiscoveryList.Exists(item => item.itemId == itemId && item.itemType == itemType.ToString());
     }
 
     // 记录新获得的物品种类
-    public void MarkItemDiscovered(int itemId)
+    public void MarkItemDiscovered(int itemId, ItemType itemType)
     {
-        bool isNew = !discoveredItems.Contains(itemId);
-        discoveredItems.Add(itemId);
-        SaveDiscoveredItems();
-
-        if (isNew)
+        
+        if (!IsNewDiscovery(itemId, itemType))
+            return;
+        
+        ItemDiscoveryInfo newItem = new ItemDiscoveryInfo
         {
-            Debug.Log("首次获得物品种类：" + itemId);
-            // 这里可以触发首次获得物品的事件
-        }
+            itemId = itemId,
+            itemType = itemType.ToString()
+        };
+    
+        itemDiscoveryList.Add(newItem);
+        SaveDiscoveredItems();
+    
+        Debug.Log($"首次获得物品：ID={itemId}，类型={itemType}");
     }
-
+    
     // 保存已发现物品列表
     private void SaveDiscoveredItems()
     {
-        PlayerData data = new PlayerData();
-        data.discoveredItemIds = new List<int>(discoveredItems).ToArray();
-        
+        PlayerData data = new PlayerData
+        {
+            discoveredItems = itemDiscoveryList.ToArray()
+        };
+
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(saveFilePath, json);
     }
@@ -70,14 +78,21 @@ public class PlayerDataManager : MonoBehaviour
         {
             string json = File.ReadAllText(saveFilePath);
             PlayerData data = JsonUtility.FromJson<PlayerData>(json);
-            
-            discoveredItems = new HashSet<int>(data.discoveredItemIds);
+            if (data.discoveredItems != null)
+                itemDiscoveryList = new List<ItemDiscoveryInfo>(data.discoveredItems);
         }
     }
 
     [System.Serializable]
     private class PlayerData
     {
-        public int[] discoveredItemIds;
+        public ItemDiscoveryInfo[] discoveredItems;
+    }
+    
+    [System.Serializable]
+    private class ItemDiscoveryInfo
+    {
+        public string itemType; // 使用字符串存储ItemType枚举值
+        public int itemId;
     }
 }
