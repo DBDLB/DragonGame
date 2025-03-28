@@ -8,8 +8,10 @@ public class ShowBagUI : MonoBehaviour
 {
     public static EggIncubatorController BagIncubatorController;
     public GameObject ShowBagButton;
+    public GameObject NormalBagButton;
     public GameObject Content;
     public List<GameObject> slots = new List<GameObject>();
+    private ItemType itemType;
 
     private void OnEnable()
     {
@@ -27,6 +29,10 @@ public class ShowBagUI : MonoBehaviour
         
         foreach (var item in Inventory.Instance.items)
         {
+            if (item.itemType != itemType)
+            {
+                continue;
+            }
             //生成一个DragonEggButton到Content下
             GameObject slot = Instantiate(ShowBagButton, Content.transform);
             Image image = null;
@@ -39,6 +45,7 @@ public class ShowBagUI : MonoBehaviour
                 }
             }
             image.sprite = item.icon;
+            slot.GetComponent<BagButton>().item = item;
             slots.Add(slot);
         }
 
@@ -46,7 +53,7 @@ public class ShowBagUI : MonoBehaviour
         {
             for (int i = slots.Count; i < Inventory.Instance.maxSlots; i++)
             {
-                GameObject slot = Instantiate(ShowBagButton, Content.transform);
+                GameObject slot = Instantiate(NormalBagButton, Content.transform);
                 Image image = null;
                 Image[] images = slot.GetComponentsInChildren<Image>(true);
                 foreach (var img in images)
@@ -60,6 +67,13 @@ public class ShowBagUI : MonoBehaviour
                 slots.Add(slot);
             }
         }
-
     }
+    
+    public void ChangeShowItemType(int itemType)
+    {
+        this.itemType = (ItemType)itemType;
+        ShowBag();
+    }
+    
+    
 }

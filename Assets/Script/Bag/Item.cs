@@ -4,7 +4,8 @@ public enum ItemType
 {
     DragonEgg,//龙蛋
     SpoilsOfWar,//战利品
-    Dragon //龙
+    Dragon, //龙
+    GameProps
 }
 
 [System.Serializable]
