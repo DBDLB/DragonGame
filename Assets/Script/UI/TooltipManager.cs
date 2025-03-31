@@ -19,6 +19,7 @@ using UnityEngine;
             private Transform buttonTransform;
             public Coroutine hideCoroutine = null; // 用于管理隐藏的协程
             private Item currentItem = null; // 当前显示的物品
+            private float sellPrice;
         
             private TextMeshProUGUI text;
             private void Awake()
@@ -88,7 +89,8 @@ using UnityEngine;
                 switch (item.itemType)
                 {
                     case ItemType.DragonEgg:
-                        text.text = "价格：" + (item as DragonEgg).eggPrice;
+                        sellPrice = (item as DragonEgg).eggPrice;
+                        text.text = "价格：" + sellPrice;
                         break;
                 }
             }
@@ -115,5 +117,17 @@ using UnityEngine;
             public bool IsPointerOverTooltip()
             {
                 return isPointerOverTooltip;
+            }
+            
+            // 售卖物品
+            public void SellItem()
+            {
+                //增加金币
+                PlayerDataManager.Instance.AddCoin(sellPrice);
+                ShopManager.Instance.ShowCoin();
+                //从背包中移除物品
+                Inventory.Instance.RemoveItem(currentItem);
+                tooltipPanel.SetActive(false);
+                currentItem = null;
             }
         }

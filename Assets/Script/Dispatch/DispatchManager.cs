@@ -114,4 +114,25 @@ public class DispatchManager : MonoBehaviour
         float DispatchTime = (location.baseValue / (sumStats * speedMultiplier)) * location.baseTime;
         return Mathf.Max(DispatchTime, 1); // 确保最小时间为1秒
     }
+    
+    //获取战利品
+    public void GetSpoilsOfWar()
+    {
+        showSpoilsOfWar.GetComponent<ShowSpoilsOfWar>().items = SelectRandomID();
+    }
+    
+    private int minID = 1;                 // ID 范围最小值
+    private int maxID = 4;               // ID 范围最大值
+    // 随机选择一个 ID
+    List<Item> SelectRandomID()
+    {
+        List<Item> items = new List<Item>();
+        for (int i = 0; i < Random.Range(2, 10); i++)
+        {
+            int selectedID = Random.Range(minID, maxID);
+            Debug.Log("Selected ID: " + selectedID);
+            items.Add(ItemManager.Instance.InstantiateItem(selectedID,ItemType.DragonEgg));
+        }
+        return items;
+    }
 }

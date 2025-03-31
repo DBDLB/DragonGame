@@ -246,6 +246,8 @@ public class InventoryManager : MonoBehaviour
             // 这里可以添加首次获得物品的特殊效果
             Debug.Log("首次获得：" + item.itemName + "！");
             // 比如显示提示界面、播放特效等
+            NewItemPopup.Instance.items.Add(item);
+            NewItemPopup.Instance.ShowPopup();
         }
         // itemList.items.Add(item);
         SaveInventory();  // 每次修改物品后保存

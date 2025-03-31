@@ -27,6 +27,9 @@ public class PlayerDataManager : MonoBehaviour
     // 新增存储物品类型和ID的集合
     private List<ItemDiscoveryInfo> itemDiscoveryList = new List<ItemDiscoveryInfo>();
     private string saveFilePath;
+    
+    //玩家金币数
+    public float coin = 0;
 
     private void Awake()
     {
@@ -54,21 +57,29 @@ public class PlayerDataManager : MonoBehaviour
         };
     
         itemDiscoveryList.Add(newItem);
-        SaveDiscoveredItems();
+        SavePlayerData();
     
         Debug.Log($"首次获得物品：ID={itemId}，类型={itemType}");
     }
     
     // 保存已发现物品列表
-    private void SaveDiscoveredItems()
+    private void SavePlayerData()
     {
         PlayerData data = new PlayerData
         {
-            discoveredItems = itemDiscoveryList.ToArray()
+            discoveredItems = itemDiscoveryList.ToArray(),
+            coin = coin // 保存金币数量
         };
 
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(saveFilePath, json);
+    }
+    
+    //增加金币
+    public void AddCoin(float amount)
+    {
+        coin += amount;
+        SavePlayerData();
     }
 
     // 加载已发现物品列表
@@ -80,6 +91,7 @@ public class PlayerDataManager : MonoBehaviour
             PlayerData data = JsonUtility.FromJson<PlayerData>(json);
             if (data.discoveredItems != null)
                 itemDiscoveryList = new List<ItemDiscoveryInfo>(data.discoveredItems);
+            coin = data.coin; // 加载金币数
         }
     }
 
@@ -87,6 +99,7 @@ public class PlayerDataManager : MonoBehaviour
     private class PlayerData
     {
         public ItemDiscoveryInfo[] discoveredItems;
+        public float coin; // 添加金币字段
     }
     
     [System.Serializable]

@@ -13,34 +13,6 @@
         "bornDragonAString": "1,2",
         "bornDragonBString": "3,1.5"
       }
-    },
-    {
-      "quantity": 1,
-      "dragonEggs": {
-        "id": 2,
-        "itemName": "dragonEgg_2",
-        "icon": "dragonEgg_2",
-        "description": "egg.",
-        "eggModelAdress": "Prefabs/DragonEgg",
-        "eggBornTime": 20,
-        "eggPrice": 200,
-        "bornDragonAString": "2,3",
-        "bornDragonBString": "4,2"
-      }
-    },
-    {
-      "quantity": 1,
-      "dragonEggs": {
-        "id": 3,
-        "itemName": "dragonEgg_3",
-        "icon": "dragonEgg_3",
-        "description": "egg.",
-        "eggModelAdress": "Prefabs/DragonEgg",
-        "eggBornTime": 30,
-        "eggPrice": 300,
-        "bornDragonAString": "3,4",
-        "bornDragonBString": "5,2.5"
-      }
     }
   ],
   "inventoryDragons": [],

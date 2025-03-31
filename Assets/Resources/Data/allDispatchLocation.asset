@@ -15,7 +15,7 @@ MonoBehaviour:
   allLocations:
   - id: 1
     locationName: Location_A
-    baseValue: 200
+    baseValue: 50
     baseTime: 5
   - id: 2
     locationName: Location_B

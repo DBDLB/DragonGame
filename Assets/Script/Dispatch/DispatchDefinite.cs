@@ -60,9 +60,11 @@ public class DispatchDefinite : MonoBehaviour
     {
         if (DispatchManager.Instance.getSpoilsOfWar)
         {
+            DispatchManager.Instance.GetSpoilsOfWar();
             DispatchManager.Instance.getSpoilsOfWar = false;
             DispatchManager.Instance.showSpoilsOfWar.SetActive(true);
             textMeshProUGUI.text = "确认出发";
+            DispatchManager.Instance.dragonImage.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "龙选择";
             return;
         }
 
