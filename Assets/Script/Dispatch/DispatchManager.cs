@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class DispatchManager : MonoBehaviour
 {
@@ -48,9 +50,22 @@ public class DispatchManager : MonoBehaviour
     public GameObject showSpoilsOfWar;
 
     [HideInInspector] public DispatchTask newTask = new DispatchTask();
+    
+    private void Update()
+    {
+        if (newTask.isCompleted)
+        {
+            if (selectedDragon != null&&selectedDragon.id != 0&&locationID!=0)
+            {
+                DispatchLocation.Location location = dispatchLocation.allLocations.Find(l => l.id == DispatchManager.Instance.locationID);
+                float DispatchTime = CalculateDispatchTime(location, selectedDragon);
+                dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = $"任务预计时间：{DispatchTime} 秒";
+            }
+        }
+    }
     public void StartDispatch()
     {
-        if (selectedDragon == null||locationID==0)
+        if (selectedDragon == null||selectedDragon.id == 0||locationID==0)
         {
             Debug.Log("请选择龙和地点！");
             return;
@@ -87,7 +102,7 @@ public class DispatchManager : MonoBehaviour
             Debug.Log($"任务剩余时间：{task.remainingTime} 秒");
             dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = $"任务剩余时间：{task.remainingTime} 秒";
         }
-
+        dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = "任务完成！";
         task.isCompleted = true;
         OnDispatchComplete(task);
     }
@@ -106,7 +121,7 @@ public class DispatchManager : MonoBehaviour
     }
     
     // 计算派遣时间
-    public static float CalculateDispatchTime(DispatchLocation.Location location, Dragon dragon)
+    public float CalculateDispatchTime(DispatchLocation.Location location, Dragon dragon)
     {
         float sumStats = dragon.attack + dragon.health + dragon.defense;
         float speedMultiplier = Mathf.Max((float)dragon.speed / 100,1);

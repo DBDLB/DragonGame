@@ -65,6 +65,8 @@ public class DispatchDefinite : MonoBehaviour
             DispatchManager.Instance.showSpoilsOfWar.SetActive(true);
             textMeshProUGUI.text = "确认出发";
             DispatchManager.Instance.dragonImage.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "龙选择";
+            DispatchManager.Instance.dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = "";
+            DispatchManager.Instance.dispatchSlider.value = 0;
             return;
         }
 

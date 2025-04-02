@@ -17,6 +17,8 @@ public class DragonButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public void OnPointerEnter(PointerEventData eventData)
     {
         TooltipManager.Instance.ShowTooltip(item, this.transform);
+        TooltipManager.Instance.sellItemBotton.SetActive(false);
+        TooltipManager.Instance.useGamePropsBotton.SetActive(false);
     }
 
     public void OnPointerExit(PointerEventData eventData)

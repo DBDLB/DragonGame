@@ -32,6 +32,15 @@ using System.Collections.Generic;
         public void OnPointerEnter(PointerEventData eventData)
         {
             TooltipManager.Instance.ShowTooltip(item, this.transform);
+            TooltipManager.Instance.sellItemBotton.SetActive(true);
+            if (item.itemType == ItemType.GameProps)
+            {
+                TooltipManager.Instance.useGamePropsBotton.SetActive(true);
+            }
+            else
+            {
+                TooltipManager.Instance.useGamePropsBotton.SetActive(false);
+            }
         }
     
         public void OnPointerExit(PointerEventData eventData)
@@ -97,7 +106,7 @@ using System.Collections.Generic;
                     if (itemPlaced)
                     {
                         // 如果成功放置，从背包中移除物品
-                        // Inventory.Instance.RemoveItem(item);
+                        Inventory.Instance.RemoveItem(item);
                         // 更新背包UI
                         transform.parent.GetComponentInParent<ShowBagUI>().ShowBag();
                         break; // 找到并放置后跳出循环

@@ -10,6 +10,16 @@ using UnityEngine;
         private Item currentItem;
         private int price;
         
+        public Item GetCurrentItem()
+        {
+            return currentItem;
+        }
+
+        public int GetPrice()
+        {
+            return price;
+        }
+        
         // 接收拖放的物品
         public void OnDrop(PointerEventData eventData)
         {
@@ -33,6 +43,7 @@ using UnityEngine;
             
             // 默认价格设置为物品价值的1.5倍
             SetPrice(CalculateDefaultPrice(item));
+            ShelfManager.Instance.SaveShelf();
             
             return true;
         }
@@ -55,6 +66,7 @@ using UnityEngine;
             itemImage.sprite = null;
             itemImage.enabled = false;
             priceText.text = "";
+            ShelfManager.Instance.SaveShelf();
             return removedItem;
         }
         

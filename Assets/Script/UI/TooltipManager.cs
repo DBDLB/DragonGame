@@ -92,6 +92,11 @@ using UnityEngine;
                         sellPrice = (item as DragonEgg).eggPrice;
                         text.text = "价格：" + sellPrice;
                         break;
+                    case ItemType.Dragon:
+                        Dragon dragon = item as Dragon;
+                        text.text = "生命值：" + dragon.health + "\n" + "攻击力：" + dragon.attack + "\n" + "防御力：" + dragon.defense + "\n" + "速度：" + dragon.speed;
+                        
+                        break;
                 }
             }
         
