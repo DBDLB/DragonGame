@@ -79,8 +79,8 @@ public class TransparentWindow : MonoBehaviour
     /// </summary>
     private Rect m_ScreenPosition;
     
-    // Start() 方法在场景启动时调用
-    private void Start()
+    // Awake() 方法在场景启动时调用
+    private void Awake()
     {
         // 在非 Unity 编辑器环境中执行以下操作
 #if !UNITY_EDITOR

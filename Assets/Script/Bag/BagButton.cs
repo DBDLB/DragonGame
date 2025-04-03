@@ -3,10 +3,11 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
-    // 添加拖拽相关接口
-    public class BagButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
-                             IBeginDragHandler, IDragHandler, IEndDragHandler
+// 添加拖拽相关接口
+    public class BagButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,
+                         IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
     {
         public Item item;
         private RectTransform rectTransform;
@@ -21,13 +22,114 @@ using System.Collections.Generic;
             rectTransform = GetComponent<RectTransform>();
             canvas = GetComponentInParent<Canvas>();
             canvasGroup = GetComponent<CanvasGroup>() ?? gameObject.AddComponent<CanvasGroup>();
+    
+            // 确保Image组件的raycastTarget为true
+            Image image = GetComponent<Image>();
+            if (image != null)
+            {
+                image.raycastTarget = true;
+            }
         }
         
         private void OnEnable()
         {
             // 注册按钮的点击事件
-            GetComponentInChildren<Button>().onClick.AddListener(OnClicked);
+            // GetComponentInChildren<Button>().onClick.AddListener(OnClicked);
         }
+        
+        // 实现右键点击接口
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            // 左键点击处理
+            if (eventData.button == PointerEventData.InputButton.Left)
+            {
+                OnClicked();
+            }
+            // 右键点击处理
+            else if (eventData.button == PointerEventData.InputButton.Right && item != null)
+            {
+                Debug.Log("右键点击 - 尝试上架物品");
+                TryPlaceItemOnShelf();
+            }
+        }
+        
+        // 尝试将物品放置到货架上
+    private void TryPlaceItemOnShelf()
+    {
+        if (item == null) return;
+
+        // 获取所有货架槽位
+        List<ShelfSlot> availableSlots = new List<ShelfSlot>();
+        
+        // 检查ShelfManager是否存在
+        if (ShelfManager.Instance != null && ShelfManager.Instance.shelfSlots != null)
+        {
+            // 寻找空的货架槽位
+            foreach (ShelfSlot slot in ShelfManager.Instance.shelfSlots)
+            {
+                if (slot != null && slot.GetCurrentItem() == null)
+                {
+                    availableSlots.Add(slot);
+                }
+            }
+
+            // 如果找到可用槽位，将物品放入第一个空槽位
+            if (availableSlots.Count > 0)
+            {
+                // 尝试放置物品
+                bool placed = availableSlots[0].PlaceItem(item);
+                
+                if (placed)
+                {
+                    // 从背包移除物品
+                    Inventory.Instance.RemoveItem(item);
+                    
+                    // 更新背包UI
+                    transform.parent.GetComponentInParent<ShowBagUI>().ShowBag();
+                    
+                    // 可以添加一个简单的反馈效果
+                    // StartCoroutine(ShowPlacementFeedback());
+                }
+            }
+            else
+            {
+                // 没有可用槽位时显示提示
+                Debug.Log("没有可用的货架槽位");
+                // 可以添加UI提示
+            }
+        }
+    }
+
+    // 显示放置成功的反馈效果
+    // private IEnumerator ShowPlacementFeedback()
+    // {
+    //     // 创建一个临时UI元素显示"已上架"提示
+    //     GameObject feedbackObj = new GameObject("PlacementFeedback");
+    //     feedbackObj.transform.SetParent(canvas.transform);
+    //     
+    //     TextMeshProUGUI feedbackText = feedbackObj.AddComponent<TextMeshProUGUI>();
+    //     feedbackText.text = "已上架";
+    //     feedbackText.fontSize = 24;
+    //     feedbackText.color = Color.green;
+    //     
+    //     RectTransform rect = feedbackObj.GetComponent<RectTransform>();
+    //     rect.position = transform.position;
+    //     rect.sizeDelta = new Vector2(100, 30);
+    //     
+    //     // 淡出效果
+    //     float duration = 1.0f;
+    //     float startTime = Time.time;
+    //     
+    //     while (Time.time < startTime + duration)
+    //     {
+    //         float alpha = 1 - ((Time.time - startTime) / duration);
+    //         feedbackText.color = new Color(feedbackText.color.r, feedbackText.color.g, feedbackText.color.b, alpha);
+    //         rect.position += Vector3.up * Time.deltaTime * 50; // 向上飘动
+    //         yield return null;
+    //     }
+    //     
+    //     Destroy(feedbackObj);
+    // }
     
         public void OnPointerEnter(PointerEventData eventData)
         {

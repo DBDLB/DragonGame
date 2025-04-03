@@ -34,7 +34,7 @@ public class ShopManager : MonoBehaviour
 
     public void ShowCoin()
     {
-        coinText.text = "金币：" + PlayerDataManager.Instance.coin.ToString();
+        coinText.text = PlayerDataManager.Instance.coin.ToString();
     }
     
     
