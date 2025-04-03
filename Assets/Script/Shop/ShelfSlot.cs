@@ -37,6 +37,7 @@ using UnityEngine;
         {
             if (currentItem != null) return false;
             
+            itemImage.color = Color.white;
             currentItem = item;
             itemImage.sprite = item.icon;
             itemImage.enabled = true;
@@ -64,6 +65,7 @@ using UnityEngine;
             Item removedItem = currentItem;
             currentItem = null;
             itemImage.sprite = null;
+            itemImage.color = new Color(1, 1, 1, 0);
             itemImage.enabled = false;
             priceText.text = "";
             ShelfManager.Instance.SaveShelf();

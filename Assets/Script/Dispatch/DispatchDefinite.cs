@@ -107,7 +107,7 @@ public class DispatchDefinite : MonoBehaviour
         else
         {
             DispatchManager.Instance.newTask.remainingTime -= 1;
-            DispatchManager.Instance.dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = $"任务剩余时间：{DispatchManager.Instance.newTask.remainingTime} 秒";
+            // DispatchManager.Instance.dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = $"任务剩余时间：{DispatchManager.Instance.newTask.remainingTime} 秒";
         }
     }
     

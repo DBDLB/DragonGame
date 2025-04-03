@@ -59,7 +59,7 @@ public class DispatchManager : MonoBehaviour
             {
                 DispatchLocation.Location location = dispatchLocation.allLocations.Find(l => l.id == DispatchManager.Instance.locationID);
                 float DispatchTime = CalculateDispatchTime(location, selectedDragon);
-                dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = $"任务预计时间：{DispatchTime} 秒";
+                dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = $"任务预计时间：{(int)DispatchTime} 秒";
             }
         }
     }
@@ -86,7 +86,7 @@ public class DispatchManager : MonoBehaviour
 
         activeTasks.Add(newTask);
         StartCoroutine(DispatchCountdown(newTask));
-        Debug.Log($"派遣龙 {selectedDragon.itemName} 到 {location.locationName}，预计时间：{DispatchTime} 秒");
+        // Debug.Log($"派遣龙 {selectedDragon.itemName} 到 {location.locationName}，预计时间：{(int)DispatchTime} 秒");
     }
 
     private IEnumerator DispatchCountdown(DispatchTask task)
@@ -99,8 +99,8 @@ public class DispatchManager : MonoBehaviour
             task.remainingTime = task.remainingTime;
             DispatchDefinite.Instance.clickCount = 0;
             dispatchSlider.value = dispatchSlider.maxValue-task.remainingTime;
-            Debug.Log($"任务剩余时间：{task.remainingTime} 秒");
-            dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = $"任务剩余时间：{task.remainingTime} 秒";
+            // Debug.Log($"任务剩余时间：{(int)task.remainingTime} 秒");
+            dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = $"任务剩余时间：{(int)task.remainingTime} 秒";
         }
         dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = "任务完成！";
         task.isCompleted = true;
