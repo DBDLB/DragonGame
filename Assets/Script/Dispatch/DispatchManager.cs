@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -41,16 +42,24 @@ public class DispatchManager : MonoBehaviour
     public Dragon selectedDragon;
 
     public bool getSpoilsOfWar = false;
-    public Slider dispatchSlider;
+    // public Slider dispatchSlider;
+    public Image dispatchSlider;
     
     
     //暂时
     public Image dragonImage;
     public Image locationImage;
     public GameObject showSpoilsOfWar;
+    public Sprite defaultSprite;
 
     [HideInInspector] public DispatchTask newTask = new DispatchTask();
-    
+
+    public void Start()
+    {
+        dispatchSlider.material.SetFloat("_Progress", 1);
+        dispatchSlider.material.SetColor("_Color", new Color(1, 1, 1, 1));
+    }
+
     private void Update()
     {
         if (newTask.isCompleted)
@@ -91,14 +100,15 @@ public class DispatchManager : MonoBehaviour
 
     private IEnumerator DispatchCountdown(DispatchTask task)
     {
-        dispatchSlider.maxValue = task.remainingTime;
+        // dispatchSlider.maxValue = task.remainingTime;
+        float maxTime = task.remainingTime;
         while (task.remainingTime > 0)
         {
-            yield return new WaitForSeconds(1);
-            task.remainingTime--;
+            yield return new WaitForSeconds(0.02f);
+            task.remainingTime -= 0.02f;
             task.remainingTime = task.remainingTime;
             DispatchDefinite.Instance.clickCount = 0;
-            dispatchSlider.value = dispatchSlider.maxValue-task.remainingTime;
+            dispatchSlider.material.SetFloat("_Progress", 1-task.remainingTime / maxTime);
             // Debug.Log($"任务剩余时间：{(int)task.remainingTime} 秒");
             dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = $"任务剩余时间：{(int)task.remainingTime} 秒";
         }
@@ -113,7 +123,8 @@ public class DispatchManager : MonoBehaviour
         selectedDragon = null;
         dragonImage.sprite = null;
         locationID = 0;
-        locationImage.sprite = null;
+        dispatchSlider.sprite = defaultSprite;
+        DispatchManager.Instance.dispatchSlider.material.SetColor("_Color", new Color(3, 3, 3, 1));
         DispatchDefinite.Instance.textMeshProUGUI.text = "派遣完成！";
         getSpoilsOfWar = true;
         // 处理战利品奖励逻辑

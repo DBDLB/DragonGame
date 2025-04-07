@@ -66,7 +66,9 @@ public class DispatchDefinite : MonoBehaviour
             textMeshProUGUI.text = "确认出发";
             DispatchManager.Instance.dragonImage.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "龙选择";
             DispatchManager.Instance.dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = "";
-            DispatchManager.Instance.dispatchSlider.value = 0;
+            DispatchManager.Instance.dispatchSlider.material.SetFloat("_Progress", 1);
+            DispatchManager.Instance.dispatchSlider.material.SetColor("_Color", new Color(1, 1, 1, 1));
+            DispatchManager.Instance.dispatchSlider.sprite = DispatchManager.Instance.defaultSprite;
             return;
         }
 
