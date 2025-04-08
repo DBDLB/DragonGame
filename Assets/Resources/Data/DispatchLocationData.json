@@ -1,0 +1,41 @@
+[
+    {
+      "id": 1,
+      "name": "mountains",
+      "icon": "mountains",
+      "description": "山脉",
+      "adventureValue" : 50,
+      "adventureTime": 5,
+      "maxTime": 10,
+      "minTime": 5,
+      "reward": 10,
+      "rewardPro": 0.5,
+      "openConditions": 0
+    },
+    {
+      "id": 2,
+      "name": "jungle",
+      "icon": "jungle",
+      "description": "丛林",
+      "adventureValue" : 300,
+      "adventureTime": 10,
+      "maxTime": 10,
+      "minTime": 5,
+      "reward": 10,
+      "rewardPro": 0.5,
+      "openConditions": 0
+    },
+    {
+      "id": 3,
+      "name": "seabed",
+      "icon": "seabed",
+      "description": "海底",
+      "adventureValue" : 400,
+      "adventureTime": 100,
+      "maxTime": 10,
+      "minTime": 5,
+      "reward": 10,
+      "rewardPro": 0.5,
+      "openConditions": 0
+    }
+]

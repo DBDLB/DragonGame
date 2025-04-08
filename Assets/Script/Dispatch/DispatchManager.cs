@@ -6,6 +6,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using System.IO;
+using Newtonsoft.Json;
 
 public class DispatchManager : MonoBehaviour
 {
@@ -32,7 +34,17 @@ public class DispatchManager : MonoBehaviour
         public int locationID;// 派遣地点ID
         public Dragon assignedDragon;// 派遣的龙
         public float remainingTime;// 剩余时间
+        public float totalTime;// 总时间
         public bool isCompleted=true;// 是否完成
+        
+        public DispatchTask(int locationID, Dragon assignedDragon, float remainingTime, float totalTime, bool isCompleted)
+        {
+            this.locationID = locationID;
+            this.assignedDragon = assignedDragon;
+            this.remainingTime = remainingTime;
+            this.totalTime = totalTime;
+            this.isCompleted = isCompleted;
+        }
     }
     public DispatchLocation dispatchLocation;  // 所有派遣地点
     private List<DispatchTask> activeTasks = new List<DispatchTask>();
@@ -48,18 +60,31 @@ public class DispatchManager : MonoBehaviour
     
     //暂时
     public Image dragonImage;
-    public Image locationImage;
     public GameObject showSpoilsOfWar;
     public Sprite defaultSprite;
 
-    [HideInInspector] public DispatchTask newTask = new DispatchTask();
+    [HideInInspector] public DispatchTask newTask = new DispatchTask(0, null, 0, 0, true);
 
     public void Start()
     {
-        dispatchSlider.material.SetFloat("_Progress", 1);
-        dispatchSlider.material.SetColor("_Color", new Color(1, 1, 1, 1));
+        LoadTasks();
+    }
+    
+    private void Awake()
+    {
+        dispatchLocation = new DispatchLocation();
+        LoadDispatchLocations();
+    }
+    
+    private void OnApplicationQuit()
+    {
+        // 游戏退出时保存任务数据
+        SaveTasks();
+        Debug.Log("游戏退出，任务数据已保存");
     }
 
+    private float autoSaveInterval = 60f; // 每60秒自动保存一次
+    private float timeSinceLastSave = 0f;
     private void Update()
     {
         if (newTask.isCompleted)
@@ -71,7 +96,62 @@ public class DispatchManager : MonoBehaviour
                 dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = $"任务预计时间：{(int)DispatchTime} 秒";
             }
         }
+        
+        // 自动保存逻辑
+        timeSinceLastSave += Time.deltaTime;
+        if (timeSinceLastSave >= autoSaveInterval)
+        {
+            SaveTasks();
+            timeSinceLastSave = 0f;
+            Debug.Log("自动保存任务数据完成");
+        }
     }
+
+    #region 派遣地点数据加载
+
+    // 初始化时加载派遣地点数据
+    private void LoadDispatchLocations()
+    {
+        string filePath = "Data/DispatchLocationData";  // 不需要.json后缀
+        TextAsset jsonText = Resources.Load<TextAsset>(filePath);
+        
+        if (jsonText != null)
+        {
+            // 使用JsonUtility
+            // DispatchLocation.Location[] locations = JsonUtility.FromJson<DispatchLocation.Location[]>("{\"locations\":" + jsonText.text + "}").locations;
+            
+            // 或使用Newtonsoft.Json
+            DispatchLocation.Location[] locations = JsonConvert.DeserializeObject<DispatchLocation.Location[]>(jsonText.text);
+            
+            if (locations != null)
+            {
+                dispatchLocation.allLocations.AddRange(locations);
+                Debug.Log($"成功加载了{locations.Length}个派遣地点");
+            }
+        }
+        else
+        {
+            dispatchSlider.material.SetFloat("_Progress", 1);
+            dispatchSlider.material.SetColor("_Color", new Color(1, 1, 1, 1));
+            Debug.LogError("未找到派遣地点数据文件: " + filePath);
+        }
+    }
+    private Sprite GetSpriteByID(int id)
+    {
+        foreach (var location in dispatchLocation.allLocations)
+        {
+            if (location.id == id)
+            {
+                // 这里假设你有一个方法可以根据ID获取对应的Sprite
+                return Resources.Load<Sprite>("Icons/" + location.icon);
+            }
+        }
+        return null;
+    }
+
+    #endregion
+
+    
     public void StartDispatch()
     {
         if (selectedDragon == null||selectedDragon.id == 0||locationID==0)
@@ -85,13 +165,7 @@ public class DispatchManager : MonoBehaviour
 
         float DispatchTime = CalculateDispatchTime(location, selectedDragon);
 
-        newTask = new DispatchTask()
-        {
-            locationID = location.id,
-            assignedDragon = selectedDragon,
-            remainingTime = DispatchTime,
-            isCompleted = false
-        };
+        newTask = new DispatchTask(location.id, selectedDragon, DispatchTime, DispatchTime, false);
 
         activeTasks.Add(newTask);
         StartCoroutine(DispatchCountdown(newTask));
@@ -101,7 +175,8 @@ public class DispatchManager : MonoBehaviour
     private IEnumerator DispatchCountdown(DispatchTask task)
     {
         // dispatchSlider.maxValue = task.remainingTime;
-        float maxTime = task.remainingTime;
+        dispatchSlider.sprite = GetSpriteByID(task.locationID);
+        float maxTime = task.totalTime;
         while (task.remainingTime > 0)
         {
             yield return new WaitForSeconds(0.02f);
@@ -160,5 +235,108 @@ public class DispatchManager : MonoBehaviour
             items.Add(ItemManager.Instance.InstantiateItem(selectedID,ItemType.DragonEgg));
         }
         return items;
+    }
+
+    #region 任务数据保存与加载
+
+    public void SaveTasks()
+    {
+        List<DispatchTaskData> taskDataList = new List<DispatchTaskData>();
+        foreach (var task in activeTasks)
+        {
+            DispatchTaskData taskData = new DispatchTaskData
+            {
+                locationID = task.locationID,
+                itemID = task.assignedDragon.itemID,
+                remainingTime = task.remainingTime,
+                totalTime = task.totalTime,
+                isCompleted = task.isCompleted
+            };
+            taskDataList.Add(taskData);
+        }
+
+        TaskListWrapper wrapper = new TaskListWrapper { tasks = taskDataList };
+        string json = JsonUtility.ToJson(wrapper, true);
+        File.WriteAllText(Application.persistentDataPath + "/tasks.json", json);
+        // System.IO.File.WriteAllText(Application.persistentDataPath + "/tasks.json", json);
+        Debug.Log("任务数据已保存！");
+    }
+    
+    public void LoadTasks()
+    {
+        string path = Application.persistentDataPath + "/tasks.json";
+        if (System.IO.File.Exists(path))
+        {
+            string json = System.IO.File.ReadAllText(path);
+            var taskDataList = JsonUtility.FromJson<TaskListWrapper>(json).tasks;
+
+            foreach (var taskData in taskDataList)
+            {
+                Dragon assignedDragon = Inventory.Instance.GetByItemID(taskData.itemID) as Dragon;
+                if (assignedDragon != null)
+                {
+                    DispatchTask task = new DispatchTask(taskData.locationID, assignedDragon, taskData.remainingTime, taskData.totalTime, taskData.isCompleted);
+                    activeTasks.Add(task);
+
+                    if (!task.isCompleted)
+                    {
+                        newTask = task;
+                        DispatchDefinite.Instance.textMeshProUGUI.text = "加油打气！";
+                        StartCoroutine(DispatchCountdown(task));
+                    }
+                }
+            }
+            Debug.Log("任务数据已加载！");
+        }
+        else
+        {
+            Debug.Log("未找到任务数据文件！");
+        }
+    }
+
+    #endregion
+    
+
+    [System.Serializable]
+    private class TaskListWrapper
+    {
+        public List<DispatchTaskData> tasks;
+    }
+    
+    [System.Serializable]
+    public class DispatchTaskData
+    {
+        public int locationID;
+        public int itemID;
+        public float remainingTime;
+        public float totalTime;
+        public bool isCompleted;
+    }
+    
+    [System.Serializable]
+    public class DispatchLocation
+    {
+        public List<Location> allLocations = new List<Location>();
+        
+        [System.Serializable]
+        public class Location
+        {
+            public int id;
+            public string name;
+            public string icon;
+            public string description;
+            public int adventureValue;
+            public float adventureTime;
+            public float maxTime;
+            public float minTime;
+            public int reward;
+            public float rewardPro;
+            public int openConditions;
+            
+            // 计算派遣时间相关属性
+            public float baseValue { get { return adventureValue; } }
+            public float baseTime { get { return adventureTime; } }
+            public string locationName { get { return description; } }
+        }
     }
 }

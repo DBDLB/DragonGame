@@ -38,28 +38,28 @@ public class PlayerDataManager : MonoBehaviour
     }
 
     // 检查物品是否为首次获得
-    public bool IsNewDiscovery(int itemId, ItemType itemType)
+    public bool IsNewDiscovery(int id, ItemType itemType)
     {
-        return !itemDiscoveryList.Exists(item => item.itemId == itemId && item.itemType == itemType.ToString());
+        return !itemDiscoveryList.Exists(item => item.id == id && item.itemType == itemType.ToString());
     }
 
     // 记录新获得的物品种类
-    public void MarkItemDiscovered(int itemId, ItemType itemType)
+    public void MarkItemDiscovered(int id, ItemType itemType)
     {
         
-        if (!IsNewDiscovery(itemId, itemType))
+        if (!IsNewDiscovery(id, itemType))
             return;
         
         ItemDiscoveryInfo newItem = new ItemDiscoveryInfo
         {
-            itemId = itemId,
+            id = id,
             itemType = itemType.ToString()
         };
     
         itemDiscoveryList.Add(newItem);
         SavePlayerData();
     
-        Debug.Log($"首次获得物品：ID={itemId}，类型={itemType}");
+        Debug.Log($"首次获得物品：ID={id}，类型={itemType}");
     }
     
     // 保存已发现物品列表
@@ -106,6 +106,6 @@ public class PlayerDataManager : MonoBehaviour
     private class ItemDiscoveryInfo
     {
         public string itemType; // 使用字符串存储ItemType枚举值
-        public int itemId;
+        public int id;
     }
 }

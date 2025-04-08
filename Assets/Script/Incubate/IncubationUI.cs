@@ -49,6 +49,8 @@ public class IncubationUI : MonoBehaviour
 
         // 注册孵蛋按钮的点击事件
         startButton.onClick.AddListener(OnStartIncubation);
+        
+        incubatorController.LoadIncubationProgress();
     }
 
     // 显示孵蛋信息
@@ -109,13 +111,13 @@ public class IncubationUI : MonoBehaviour
     }
 
     // 更新孵化进度显示（可以根据需要做进度条等）
-    public void UpdateIncubationProgress()
+    public void UpdateIncubationProgress(DragonEgg currentEgg)
     {
-        if (selectedEgg != null && selectedEgg.status == EggStatus.InProgress)
+        // if (selectedEgg != null && selectedEgg.status == EggStatus.InProgress)
         {
-            float remainingTime = selectedEgg.eggBornTime - (Time.time - selectedEgg.incubationStartTime);
+            float remainingTime = currentEgg.eggBornTime - (Time.time - currentEgg.incubationStartTime);
             remainingTime = Mathf.Max(0, remainingTime);
-            IncubateProgressBar.value = 1 - remainingTime / selectedEgg.eggBornTime; ;
+            IncubateProgressBar.value = 1 - remainingTime / currentEgg.eggBornTime; ;
             IncubateProgressBar.GetComponentInChildren<TextMeshProUGUI>().text = remainingTime.ToString("F2") + "s";
         }
     }

@@ -26,6 +26,18 @@ public class Inventory : MonoBehaviour
             return instance;
         }
     }
+    
+    public Item GetByItemID(int itemID)
+    {
+        foreach (var item in items)
+        {
+            if (item.itemID == itemID)
+            {
+                return item;
+            }
+        }
+        return null;
+    }
 
     // 添加物品到背包
     public bool AddItem(Item item)
