@@ -30,7 +30,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _ColorMask: 15
-    - _Progress: 1.0000296
+    - _Progress: 1
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
@@ -39,6 +39,6 @@ Material:
     - _UseUIAlphaClip: 0
     - _ZTest: 4
     m_Colors:
-    - _Color: {r: 3, g: 3, b: 3, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _WaterLineColor: {r: 2.6082377, g: 2.6082377, b: 2.6082377, a: 1}
   m_BuildTextureStacks: []
