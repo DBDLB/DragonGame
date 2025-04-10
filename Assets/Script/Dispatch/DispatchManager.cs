@@ -136,7 +136,7 @@ public class DispatchManager : MonoBehaviour
             Debug.LogError("未找到派遣地点数据文件: " + filePath);
         }
     }
-    private Sprite GetSpriteByID(int id)
+    public Sprite GetSpriteByID(int id)
     {
         foreach (var location in dispatchLocation.allLocations)
         {
@@ -199,7 +199,8 @@ public class DispatchManager : MonoBehaviour
         dragonImage.sprite = null;
         locationID = 0;
         dispatchSlider.sprite = defaultSprite;
-        DispatchManager.Instance.dispatchSlider.material.SetColor("_Color", new Color(3, 3, 3, 1));
+        dispatchSlider.material.SetColor("_Color", new Color(3, 3, 3, 1));
+        dispatchSlider.GetComponent<Button>().interactable = false;
         DispatchDefinite.Instance.textMeshProUGUI.text = "派遣完成！";
         getSpoilsOfWar = true;
         // 处理战利品奖励逻辑
@@ -209,7 +210,7 @@ public class DispatchManager : MonoBehaviour
     // 计算派遣时间
     public float CalculateDispatchTime(DispatchLocation.Location location, Dragon dragon)
     {
-        float sumStats = dragon.attack + dragon.health + dragon.defense;
+        float sumStats = dragon.attack + dragon.life + dragon.defense;
         float speedMultiplier = Mathf.Max((float)dragon.speed / 100,1);
         // 派遣时间 = （基础值 / （龙的总属性 * 速度乘数）） * 基础时间
         float DispatchTime = (location.baseValue / (sumStats * speedMultiplier)) * location.baseTime;

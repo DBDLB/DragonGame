@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class EggIncubatorController : MonoBehaviour
 {
     // 当前孵化的龙蛋
-    private DragonEgg currentEgg;
+    public DragonEgg currentEgg;
     private string savePath;
 
     private void Awake()
@@ -79,8 +79,8 @@ public class EggIncubatorController : MonoBehaviour
                     currentEgg.eggModelAdress,
                     currentEgg.eggBornTime,
                     currentEgg.eggPrice,
-                    currentEgg.hatchedDragons[0],
-                    currentEgg.hatchedDragons[1]
+                    currentEgg.bornDragonId,
+                    currentEgg.bornDragonPro
                 )
                 },
                 remainingTime = currentEgg.eggBornTime - (Time.time - currentEgg.incubationStartTime),
@@ -91,11 +91,11 @@ public class EggIncubatorController : MonoBehaviour
             File.WriteAllText(savePath, json);
             Debug.Log("孵化进度已保存");
         }
-        // else if (File.Exists(savePath))
-        // {
-        //     // 如果没有正在孵化的蛋，删除保存文件
-        //     File.Delete(savePath);
-        // }
+        else if (File.Exists(savePath))
+        {
+            // 如果没有正在孵化的蛋，删除保存文件
+            File.Delete(savePath);
+        }
     }
 
     // 加载孵化进度
@@ -109,7 +109,7 @@ public class EggIncubatorController : MonoBehaviour
             if (saveData != null && saveData.status == EggStatus.InProgress)
             {
                 Sprite icon = Resources.Load<Sprite>("Icons/" + saveData.eggData.dragonEggs.icon);
-                List<Vector2> hatchedDragons = new List<Vector2> { saveData.eggData.dragonEggs.bornDragonA, saveData.eggData.dragonEggs.bornDragonB };
+                // List<Vector2> hatchedDragons = new List<Vector2> { saveData.eggData.dragonEggs.bornDragonA, saveData.eggData.dragonEggs.bornDragonB };
                 DragonEgg egg = new DragonEgg(
                     saveData.eggData.dragonEggs.itemName, 
                     ItemType.DragonEgg, 
@@ -117,7 +117,8 @@ public class EggIncubatorController : MonoBehaviour
                     icon, 
                     // bool.Parse(eggData.isStackable), 
                     saveData.eggData.dragonEggs.eggBornTime, 
-                    hatchedDragons, 
+                    saveData.eggData.dragonEggs.bornDragonId,
+                    saveData.eggData.dragonEggs.bornDragonPro,
                     saveData.eggData.dragonEggs.id, 
                     saveData.eggData.itemID,
                     saveData.eggData.dragonEggs.description,

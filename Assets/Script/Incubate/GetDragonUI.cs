@@ -16,7 +16,7 @@ public class GetDragonUI : MonoBehaviour
     {
         dragonSprite.sprite = dragon.icon;
         dragonName.text = "名称: " + dragon.itemName;
-        dragonHealth.text = "生命值: " + dragon.health.ToString();
+        dragonHealth.text = "生命值: " + dragon.life.ToString();
         dragonAttack.text = "攻击力: " + dragon.attack.ToString();
         dragonDefense.text = "防御力: " + dragon.defense.ToString();
     }

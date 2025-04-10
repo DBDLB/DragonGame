@@ -50,14 +50,15 @@ public class InventoryManager : MonoBehaviour
                         item.itemName,
                         item.icon.name,
                         dragonEgg.description,
+                         
                         
                         // description = dragonEgg.description,
                         // isStackable = item.isStackable.ToString(),
                         dragonEgg.eggModelAdress,
                         dragonEgg.eggBornTime,
                         dragonEgg.eggPrice,
-                        dragonEgg.hatchedDragons[0],
-                        dragonEgg.hatchedDragons[1]
+                        dragonEgg.bornDragonId,
+                        dragonEgg.bornDragonPro
                         );
                     dragonEggsList.Add(new InventoryDragonEggData() {itemID = item.itemID, quantity = item.quantity,dragonEggs = eggData});
                     break;
@@ -73,7 +74,7 @@ public class InventoryManager : MonoBehaviour
                         // isStackable = item.isStackable.ToString(),
                         
                         dragon.dragonModelAdress,
-                        dragon.health,
+                        dragon.life,
                         dragon.attack,
                         dragon.defense,
                         dragon.speed
@@ -115,7 +116,7 @@ public class InventoryManager : MonoBehaviour
                 foreach (var eggData in inventoryData.inventoryDragonEggs)
                 {
                     Sprite icon = Resources.Load<Sprite>("Icons/" + eggData.dragonEggs.icon);
-                    List<Vector2> hatchedDragons = new List<Vector2> { eggData.dragonEggs.bornDragonA, eggData.dragonEggs.bornDragonB };
+                    // List<Vector2> hatchedDragons = new List<Vector2> { eggData.dragonEggs.bornDragonA, eggData.dragonEggs.bornDragonB };
                     DragonEgg egg = new DragonEgg(
                         eggData.dragonEggs.itemName, 
                         ItemType.DragonEgg, 
@@ -123,7 +124,8 @@ public class InventoryManager : MonoBehaviour
                         icon, 
                         // bool.Parse(eggData.isStackable), 
                         eggData.dragonEggs.eggBornTime, 
-                        hatchedDragons, 
+                        eggData.dragonEggs.bornDragonId,
+                        eggData.dragonEggs.bornDragonPro,
                         eggData.dragonEggs.id, 
                         eggData.itemID,
                         eggData.dragonEggs.description,
@@ -179,7 +181,7 @@ public class InventoryManager : MonoBehaviour
                     foreach (var eggData in inventoryDataList.inventoryDragonEggs)
                     {
                         Sprite icon = Resources.Load<Sprite>("Icons/" + eggData.dragonEggs.icon);
-                        List<Vector2> hatchedDragons = new List<Vector2> { eggData.dragonEggs.bornDragonA, eggData.dragonEggs.bornDragonB };
+                        // List<Vector2> hatchedDragons = new List<Vector2> { eggData.dragonEggs.bornDragonA, eggData.dragonEggs.bornDragonB };
                         DragonEgg egg = new DragonEgg(
                             eggData.dragonEggs.itemName, 
                             ItemType.DragonEgg, 
@@ -187,7 +189,8 @@ public class InventoryManager : MonoBehaviour
                             icon, 
                             // bool.Parse(eggData.isStackable), 
                             eggData.dragonEggs.eggBornTime, 
-                            hatchedDragons, 
+                            eggData.dragonEggs.bornDragonId,
+                            eggData.dragonEggs.bornDragonPro,
                             eggData.dragonEggs.id, 
                             Item.ItemIDGenerator.GetUniqueID(),
                             eggData.dragonEggs.description,
@@ -195,7 +198,11 @@ public class InventoryManager : MonoBehaviour
                             eggData.dragonEggs.eggPrice
                         );
                         egg.quantity = eggData.quantity;
-                        Inventory.Instance.AddItem(egg);
+                        if (egg.id!=0)
+                        {
+                            Inventory.Instance.AddItem(egg);
+                        }
+
                     }
                 }
                 // 加载龙
@@ -304,7 +311,7 @@ public class InventoryManager : MonoBehaviour
     //
     //     //龙
     //     //生命
-    //     public int health;
+    //     public int life;
     //     //攻击力
     //     public int attack;
     //     //防御力

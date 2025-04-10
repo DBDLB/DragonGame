@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 public class ItemManager : MonoBehaviour
@@ -46,6 +47,12 @@ public class ItemManager : MonoBehaviour
         
         // 加载战利品数据
         LoadSpoilsOfWarData();
+    }
+    
+    [System.Serializable]
+    public class DragonEggDataWrapper
+    {
+        public DragonEggData[] inventoryDragonEggs { get; set; }
     }
     
     // 加载龙蛋数据
@@ -141,8 +148,8 @@ public class ItemManager : MonoBehaviour
                 if (dragonEggData != null)
                 {
                     Sprite icon = Resources.Load<Sprite>("Icons/" + dragonEggData.icon);
-                    List<Vector2> hatchedDragons = new List<Vector2> { dragonEggData.bornDragonA, dragonEggData.bornDragonB };
-                    DragonEgg dragonEgg = new DragonEgg(dragonEggData.itemName,type,1,icon,dragonEggData.eggBornTime,hatchedDragons,dragonEggData.id,Item.ItemIDGenerator.GetUniqueID(),dragonEggData.description,dragonEggData.eggModelAdress,dragonEggData.eggPrice);
+                    // List<Vector2> hatchedDragons = new List<Vector2> { dragonEggData.bornDragonA, dragonEggData.bornDragonB };
+                    DragonEgg dragonEgg = new DragonEgg(dragonEggData.itemName,type,1,icon,dragonEggData.eggBornTime,dragonEggData.bornDragonId,dragonEggData.bornDragonPro,dragonEggData.id,Item.ItemIDGenerator.GetUniqueID(),dragonEggData.description,dragonEggData.eggModelAdress,dragonEggData.eggPrice);
                     Inventory.Instance.AddItem(dragonEgg);
                     item = dragonEgg;
                 }
@@ -187,10 +194,10 @@ public class DragonEggData
     public string eggModelAdress;
     public float eggBornTime;
     public float eggPrice;
-    public string bornDragonAString;
-    public string bornDragonBString;
+    public string bornDragonId;
+    public string bornDragonPro;
     
-    public DragonEggData(int id, string itemName, string icon, string description, string eggModelAdress, float eggBornTime, float eggPrice, Vector2 bornDragonA, Vector2 bornDragonB)
+    public DragonEggData(int id, string itemName, string icon, string description, string eggModelAdress, float eggBornTime, float eggPrice, string bornDragonId, string bornDragonPro)
     {
         this.id = id;
         this.itemName = itemName;
@@ -199,47 +206,24 @@ public class DragonEggData
         this.eggModelAdress = eggModelAdress;
         this.eggBornTime = eggBornTime;
         this.eggPrice = eggPrice;
-        this.bornDragonA = bornDragonA;
-        this.bornDragonB = bornDragonB;
+        this.bornDragonId = bornDragonId;
+        this.bornDragonPro = bornDragonPro;
     }
     
-    // 不序列化的Vector2属性
-    [JsonIgnore]
-    public Vector2 bornDragonA 
-    {
-        get { return StringToVector2(bornDragonAString); }
-        set { bornDragonAString = Vector2ToString(value); }
-    }
+    // [JsonIgnore]
+    // public string[] bornDragonId 
+    // {
+    //     get { return StringToArray(bornDragonIdString); }
+    //     set { bornDragonIdString = ArrayToString(value); }
+    // }
+    //
+    // [JsonIgnore]
+    // public string[] bornDragonPro
+    // {
+    //     get { return StringToArray(bornDragonProString); }
+    //     set { bornDragonProString = ArrayToString(value); }
+    // }
     
-    [JsonIgnore]
-    public Vector2 bornDragonB
-    {
-        get { return StringToVector2(bornDragonBString); }
-        set { bornDragonBString = Vector2ToString(value); }
-    }
-    
-    // 辅助方法：将字符串转换为Vector2
-    private Vector2 StringToVector2(string vectorString)
-    {
-        if (string.IsNullOrEmpty(vectorString))
-            return Vector2.zero;
-            
-        string[] values = vectorString.Split(',');
-        if (values.Length != 2)
-            return Vector2.zero;
-            
-        float x, y;
-        if (float.TryParse(values[0], out x) && float.TryParse(values[1], out y))
-            return new Vector2(x, y);
-            
-        return Vector2.zero;
-    }
-    
-    // 辅助方法：将Vector2转换为字符串
-    private string Vector2ToString(Vector2 vector)
-    {
-        return vector.x + "," + vector.y;
-    }
 }
 
 [System.Serializable]

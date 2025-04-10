@@ -1,51 +1,33 @@
 [
     {
-      "id": 1,
-      "itemName": "dragon_1",
-      "description": "dragon.",
-      "icon": "dragon_1",
-      "dragonModelAdress": "Prefabs/Dragon",
-      "quantity": 200,
-      "health": 100,
-      "attack": 10,
-      "defense": 5,
-      "speed": 5
+      "id": "1021",
+      "itemName": "小黑龙",
+      "icon": "1021",
+      "dragonModelAdress": "",
+      "description": "山谷里最常见的龙，和村里的狗一样多。",
+      "level": "绿",
+      "life": "3, 1",
+      "defense": "3, 1",
+      "attack": "3, 1",
+      "speed": "105, 95",
+      "attributeA": "1081",
+      "attributeB": "1081",
+      "attributeC": "1082"
     },
     {
-      "id": 2,
-      "itemName": "dragon_2",
-      "description": "dragon.",
-      "icon": "dragon_1",
-      "dragonModelAdress": "Prefabs/Dragon",
-      "quantity": 200,
-      "health": 100,
-      "attack": 10,
-      "defense": 5,
-      "speed": 5
-    },
-    {
-      "id": 3,
-      "itemName": "dragon_3",
-      "description": "dragon.",
-      "icon": "dragon_1",
-      "dragonModelAdress": "Prefabs/Dragon",
-      "quantity": 200,
-      "health": 100,
-      "attack": 10,
-      "defense": 5,
-      "speed": 5
-    },
-    {
-      "id": 4,
-      "itemName": "dragon_4",
-      "description": "dragon.",
-      "icon": "dragon_1",
-      "dragonModelAdress": "Prefabs/Dragon",
-      "quantity": 200,
-      "health": 100,
-      "attack": 10,
-      "defense": 5,
-      "speed": 5
+      "id": "1022",
+      "itemName": "小绿龙",
+      "icon": "1022",
+      "dragonModelAdress": "",
+      "description": "生命的气息环绕着它。",
+      "level": "绿",
+      "life": "8, 2",
+      "defense": "4, 2",
+      "attack": "3, 1",
+      "speed": "105, 95",
+      "attributeA": "1081",
+      "attributeB": "1081",
+      "attributeC": "1082"
     }
 ]
 

@@ -64,7 +64,7 @@ using UnityEngine;
             {
                 if (tooltipPanel.activeSelf && tooltipActive)
                 {
-                    Vector3 offset = new Vector3((buttonTransform.GetComponent<RectTransform>().sizeDelta).x / 2, 0, 0);
+                    Vector3 offset = new Vector3((buttonTransform.GetComponent<RectTransform>().sizeDelta).x / 2 * buttonTransform.GetComponent<RectTransform>().localScale.x, 0, 0);
                     tooltipPanel.transform.position = buttonTransform.position - (Vector3)tooltipPanel.GetComponent<RectTransform>().sizeDelta / 2 - offset;
                     tooltipActive = false;
                 }
@@ -94,7 +94,7 @@ using UnityEngine;
                         break;
                     case ItemType.Dragon:
                         Dragon dragon = item as Dragon;
-                        text.text = "生命值：" + dragon.health + "\n" + "攻击力：" + dragon.attack + "\n" + "防御力：" + dragon.defense + "\n" + "速度：" + dragon.speed;
+                        text.text = "生命值：" + dragon.life + "\n" + "攻击力：" + dragon.attack + "\n" + "防御力：" + dragon.defense + "\n" + "速度：" + dragon.speed;
                         
                         break;
                 }

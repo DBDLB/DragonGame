@@ -1,36 +1,27 @@
 [
-    {
-      "id": 1,
-      "itemName": "dragonEgg_1",
-      "icon": "dragonEgg_1",
-      "description": "egg.",
-      "eggModelAdress": "Prefabs/DragonEgg",
-      "eggBornTime": 10,
-      "eggPrice": 100,
-      "bornDragonAString": "1,2",
-      "bornDragonBString": "3,10"
-    },
-    {
-      "id": 2,
-      "itemName": "dragonEgg_2",
-      "icon": "dragonEgg_2",
-      "description": "egg.",
-      "eggModelAdress": "Prefabs/DragonEgg",
-      "eggBornTime": 20,
-      "eggPrice": 200,
-      "bornDragonAString": "2,3",
-      "bornDragonBString": "4,2"
-    },
-    {
-      "id": 3,
-      "itemName": "dragonEgg_3",
-      "icon": "dragonEgg_3",
-      "description": "egg.",
-      "eggModelAdress": "Prefabs/DragonEgg",
-      "eggBornTime": 30,
-      "eggPrice": 300,
-      "bornDragonAString": "3,4",
-      "bornDragonBString": "5,2.5"
-    }
+  {
+    "id": "1011",
+    "itemName": "朴素的蛋",
+    "icon": "1011",
+    "description": "平平无奇，不知道里面的小家伙是什么。",
+    "level": "绿",
+    "eggBornTime": "20",
+    "listPrice": "20",
+    "sellPrice": "4",
+    "bornDragonId": "1021",
+    "bornDragonPro": "100"
+  },
+  {
+    "id": "1012",
+    "itemName": "生命之蛋",
+    "icon": "1012",
+    "description": "能感觉到一丝微弱的生命气息。",
+    "level": "绿",
+    "eggBornTime": "30",
+    "listPrice": "30",
+    "sellPrice": "6",
+    "bornDragonId": "1021, 1022",
+    "bornDragonPro": "50, 50"
+  }
 ]
 

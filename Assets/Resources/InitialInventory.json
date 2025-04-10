@@ -3,15 +3,16 @@
     {
       "quantity": 1,
       "dragonEggs": {
-        "id": 1,
-        "itemName": "dragonEgg_1",
-        "icon": "dragonEgg_1",
-        "description": "egg.",
-        "eggModelAdress": "Prefabs/DragonEgg",
-        "eggBornTime": 10,
-        "eggPrice": 100,
-        "bornDragonAString": "1,2",
-        "bornDragonBString": "3,1.5"
+        "id": "1011",
+        "itemName": "朴素的蛋",
+        "icon": "1011",
+        "description": "平平无奇，不知道里面的小家伙是什么。",
+        "level": "绿",
+        "eggBornTime": "20",
+        "listPrice": "20",
+        "sellPrice": "4",
+        "bornDragonId": "1021",
+        "bornDragonPro": "100"
       }
     }
   ],

@@ -6,6 +6,7 @@ Shader "My/UI/Default"
         [hdr]_Color ("Tint", Color) = (1,1,1,1)
         _Progress ("Progress", Range(0, 1)) = 0.5
         [hdr]_WaterLineColor ("Water Line Color", Color) = (1,1,1,0.5)
+        _waterWaveWeight ("Water Wave Weight", Range(0, 1)) = 0.01
 
         [HideInInspector]_StencilComp ("Stencil Comparison", Float) = 8
         [HideInInspector]_Stencil ("Stencil ID", Float) = 0
@@ -13,7 +14,7 @@ Shader "My/UI/Default"
         [HideInInspector]_StencilWriteMask ("Stencil Write Mask", Float) = 255
         [HideInInspector]_StencilReadMask ("Stencil Read Mask", Float) = 255
 
-        _ColorMask ("Color Mask", Float) = 15
+        [HideInInspector]_ColorMask ("Color Mask", Float) = 15
 
         [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
         [Enum(UnityEngine.Rendering.CompareFunction)]_ZTest ("ZTest", Int) = 4
@@ -84,6 +85,7 @@ Shader "My/UI/Default"
             float4 _MainTex_ST;
             float _Progress;
             float4 _WaterLineColor;
+            float _waterWaveWeight;
             CBUFFER_END
 
             // 计算颜色灰度
@@ -136,8 +138,8 @@ Shader "My/UI/Default"
                 float _WaterWaveStrength = 0.01; // 在Properties中声明
                 float _WaterWaveFreq = 30.0;
 
-                float waterLineA = (smoothstep(0,0.01,(uv.y-_Progress))).xxx;
-                float waterLineB = (smoothstep(0,0.01,(_Progress-uv.y))).xxx;
+                float waterLineA = (smoothstep(0,_waterWaveWeight,(uv.y-_Progress))).xxx;
+                float waterLineB = (smoothstep(0,_waterWaveWeight,(_Progress-uv.y))).xxx;
 
                 float waterLine = 1-saturate(max(waterLineA,waterLineB));
                 

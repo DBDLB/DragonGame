@@ -81,9 +81,10 @@ public class IncubationUI : MonoBehaviour
         }
     }
     
+    // 取消孵化
     public void CancelIncubation()
     {
-        if (selectedEgg != null)
+        if (incubatorController.currentEgg != null)
         {
             selectEgg.sprite = null;
             IncubateButton.interactable = true;
@@ -95,7 +96,8 @@ public class IncubationUI : MonoBehaviour
             hatchingEggImage.color = new Color(0, 0, 0, 0);
             hatchingEggImage.gameObject.SetActive(false);
             hatchingEggImage.GetComponent<Button>().interactable = false;
-            Inventory.Instance.AddItem(selectedEgg);
+            Inventory.Instance.AddItem(incubatorController.currentEgg);
+            incubatorController.currentEgg = null;
         }
     }
     
