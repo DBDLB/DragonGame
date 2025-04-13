@@ -68,10 +68,10 @@ using UnityEngine;
                         // isStackable = item.isStackable.ToString(),
                         
                         dragon.dragonModelAdress,
-                        dragon.life,
-                        dragon.attack,
-                        dragon.defense,
-                        dragon.speed
+                        dragon.life.ToString(),
+                        dragon.attack.ToString(),
+                        dragon.defense.ToString(),
+                        dragon.speed.ToString()
                     );
                     dragonsList.Add(new InventoryManager.InventoryDragonData() {itemID = item.itemID, quantity = item.quantity,dragons = dragonData});
                     break;
@@ -146,10 +146,10 @@ using UnityEngine;
                         1,
                         icon,
                         // bool.Parse(dragonData.isStackable),
-                        dragonData.dragons.life,
-                        dragonData.dragons.attack,
-                        dragonData.dragons.defense,
-                        dragonData.dragons.speed,
+                        int.TryParse(dragonData.dragons.life, out int life) ? life : 0,
+                        int.TryParse(dragonData.dragons.attack, out int attack) ? attack : 0,
+                        int.TryParse(dragonData.dragons.defense, out int defense) ? defense : 0,
+                        int.TryParse(dragonData.dragons.speed, out int speed) ? speed : 0,
                         dragonData.dragons.id,
                         dragonData.itemID,
                         dragonData.dragons.description,

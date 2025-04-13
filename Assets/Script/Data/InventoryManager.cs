@@ -74,10 +74,10 @@ public class InventoryManager : MonoBehaviour
                         // isStackable = item.isStackable.ToString(),
                         
                         dragon.dragonModelAdress,
-                        dragon.life,
-                        dragon.attack,
-                        dragon.defense,
-                        dragon.speed
+                        dragon.life.ToString(),
+                        dragon.attack.ToString(),
+                        dragon.defense.ToString(),
+                        dragon.speed.ToString()
                     );
                     dragonsList.Add(new InventoryDragonData() {itemID = item.itemID, quantity = item.quantity,dragons = dragonData});
                     break;
@@ -149,10 +149,10 @@ public class InventoryManager : MonoBehaviour
                         1,
                         icon,
                         // bool.Parse(dragonData.isStackable),
-                        dragonData.dragons.life,
-                        dragonData.dragons.attack,
-                        dragonData.dragons.defense,
-                        dragonData.dragons.speed,
+                        int.TryParse(dragonData.dragons.life.ToString(), out int life) ? life : 0,
+                        int.TryParse(dragonData.dragons.attack.ToString(), out int attack) ? attack : 0,
+                        int.TryParse(dragonData.dragons.defense.ToString(), out int defense) ? defense : 0,
+                        int.TryParse(dragonData.dragons.speed.ToString(), out int speed) ? speed : 0,
                         dragonData.dragons.id,
                         dragonData.itemID,
                         dragonData.dragons.description,
@@ -217,10 +217,10 @@ public class InventoryManager : MonoBehaviour
                             1,
                             icon,
                             // bool.Parse(dragonData.isStackable),
-                            dragonData.dragons.life,
-                            dragonData.dragons.attack,
-                            dragonData.dragons.defense,
-                            dragonData.dragons.speed,
+                            int.TryParse(dragonData.dragons.life.ToString(), out int life) ? life : 0,
+                            int.TryParse(dragonData.dragons.attack.ToString(), out int attack) ? attack : 0,
+                            int.TryParse(dragonData.dragons.defense.ToString(), out int defense) ? defense : 0,
+                            int.TryParse(dragonData.dragons.speed.ToString(), out int speed) ? speed : 0,
                             dragonData.dragons.id,
                             Item.ItemIDGenerator.GetUniqueID(),
                             dragonData.dragons.description,

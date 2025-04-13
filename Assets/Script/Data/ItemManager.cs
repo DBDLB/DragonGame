@@ -159,7 +159,11 @@ public class ItemManager : MonoBehaviour
                 if (dragonData != null)
                 {
                     Sprite icon = Resources.Load<Sprite>("Icons/" + dragonData.icon);
-                    Item dragon = new Dragon(dragonData.itemName,type,1,icon,dragonData.life,dragonData.attack,dragonData.defense,dragonData.speed,dragonData.id,Item.ItemIDGenerator.GetUniqueID(),dragonData.description,dragonData.dragonModelAdress);
+                    int life = GetRandomValueFromRange(dragonData.life);
+                    int attack = GetRandomValueFromRange(dragonData.attack);
+                    int defense = GetRandomValueFromRange(dragonData.defense);
+                    int speed = GetRandomValueFromRange(dragonData.speed);
+                    Item dragon = new Dragon(dragonData.itemName,type,1,icon,life,attack,defense,speed,dragonData.id,Item.ItemIDGenerator.GetUniqueID(),dragonData.description,dragonData.dragonModelAdress);
                     Inventory.Instance.AddItem(dragon);
                     item = dragon;
                 }
@@ -177,6 +181,16 @@ public class ItemManager : MonoBehaviour
                 break;
         }
         return item;
+    }
+    
+    private int GetRandomValueFromRange(string rangeString)
+    {
+        string[] values = rangeString.Split(',');
+        if (values.Length == 2 && int.TryParse(values[0].Trim(), out int max) && int.TryParse(values[1].Trim(), out int min))
+        {
+            return UnityEngine.Random.Range(min, max + 1);
+        }
+        return 0;
     }
 }
 
@@ -237,12 +251,12 @@ public class DragonData
     
     // 龙特有属性
     public string dragonModelAdress;
-    public int life;
-    public int defense;
-    public int attack;
-    public int speed;
+    public string life;
+    public string defense;
+    public string attack;
+    public string speed;
     
-    public DragonData(int id, string itemName, string icon, string description, string dragonModelAdress, int life, int defense, int attack, int speed)
+    public DragonData(int id, string itemName, string icon, string description, string dragonModelAdress, string life, string defense, string attack, string speed)
     {
         this.id = id;
         this.itemName = itemName;

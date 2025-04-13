@@ -14,6 +14,81 @@
         "bornDragonId": "1021",
         "bornDragonPro": "100"
       }
+    },
+    {
+      "quantity": 1,
+      "dragonEggs": {
+        "id": "1012",
+        "itemName": "生命之蛋",
+        "icon": "1012",
+        "description": "能感觉到一丝微弱的生命气息。",
+        "level": "绿",
+        "eggBornTime": "30",
+        "listPrice": "30",
+        "sellPrice": "6",
+        "bornDragonId": "1021, 1022",
+        "bornDragonPro": "50, 50"
+      }
+    },
+    {
+      "quantity": 1,
+      "dragonEggs": {
+        "id": "1012",
+        "itemName": "生命之蛋",
+        "icon": "1012",
+        "description": "能感觉到一丝微弱的生命气息。",
+        "level": "绿",
+        "eggBornTime": "30",
+        "listPrice": "30",
+        "sellPrice": "6",
+        "bornDragonId": "1021, 1022",
+        "bornDragonPro": "50, 50"
+      }
+    },
+    {
+      "quantity": 1,
+      "dragonEggs": {
+        "id": "1012",
+        "itemName": "生命之蛋",
+        "icon": "1012",
+        "description": "能感觉到一丝微弱的生命气息。",
+        "level": "绿",
+        "eggBornTime": "30",
+        "listPrice": "30",
+        "sellPrice": "6",
+        "bornDragonId": "1021, 1022",
+        "bornDragonPro": "50, 50"
+      }
+    },
+    {
+      "quantity": 1,
+      "dragonEggs": {
+        "id": "1012",
+        "itemName": "生命之蛋",
+        "icon": "1012",
+        "description": "能感觉到一丝微弱的生命气息。",
+        "level": "绿",
+        "eggBornTime": "30",
+        "listPrice": "30",
+        "sellPrice": "6",
+        "bornDragonId": "1021, 1022",
+        "bornDragonPro": "50, 50"
+      }
+    },
+    {
+      "quantity": 1,
+      "dragonEggs": {
+        "id": "1012",
+        "itemName": "生命之蛋",
+        "icon": "1012",
+        "description": "能感觉到一丝微弱的生命气息。",
+        "level": "绿",
+        "eggBornTime": "30",
+        "listPrice": "30",
+        "sellPrice": "6",
+        "bornDragonId": "1021, 1022",
+        "bornDragonPro": "50, 50"
+      }
     }
   ],
   "inventoryDragons": [],
