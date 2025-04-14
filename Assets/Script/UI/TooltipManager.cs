@@ -89,7 +89,7 @@ using UnityEngine;
                 switch (item.itemType)
                 {
                     case ItemType.DragonEgg:
-                        sellPrice = (item as DragonEgg).eggPrice;
+                        sellPrice = (item as DragonEgg).sellPrice;
                         text.text = "价格：" + sellPrice;
                         break;
                     case ItemType.Dragon:

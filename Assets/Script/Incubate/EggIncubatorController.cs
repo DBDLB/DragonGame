@@ -78,7 +78,8 @@ public class EggIncubatorController : MonoBehaviour
                     // isStackable = item.isStackable.ToString(),
                     currentEgg.eggModelAdress,
                     currentEgg.eggBornTime,
-                    currentEgg.eggPrice,
+                    currentEgg.sellPrice,
+                    currentEgg.listPrice,
                     currentEgg.bornDragonId,
                     currentEgg.bornDragonPro
                 )
@@ -123,7 +124,8 @@ public class EggIncubatorController : MonoBehaviour
                     saveData.eggData.itemID,
                     saveData.eggData.dragonEggs.description,
                     saveData.eggData.dragonEggs.eggModelAdress,
-                    saveData.eggData.dragonEggs.eggPrice
+                    saveData.eggData.dragonEggs.sellPrice,
+                    saveData.eggData.dragonEggs.listPrice
                 );
                 egg.quantity = saveData.eggData.quantity;
                 

@@ -8250,7 +8250,7 @@ MonoBehaviour:
     id: 0
     description: 
     dragonModelAdress: 
-    health: 0
+    life: 0
     attack: 0
     speed: 0
     defense: 0

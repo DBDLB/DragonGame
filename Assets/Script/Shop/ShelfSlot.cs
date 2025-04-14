@@ -42,7 +42,7 @@ using UnityEngine;
             itemImage.sprite = item.icon;
             itemImage.enabled = true;
             
-            // 默认价格设置为物品价值的1.5倍
+            // 设置物品价格
             SetPrice(CalculateDefaultPrice(item));
             ShelfManager.Instance.SaveShelf();
             
@@ -80,7 +80,7 @@ using UnityEngine;
             {
                 case ItemType.DragonEgg:
                     DragonEgg egg = item as DragonEgg;
-                    return Mathf.RoundToInt(egg.eggPrice * 1.5f);
+                    return Mathf.RoundToInt(egg.listPrice);
                 case ItemType.Dragon:
                     // 为龙设置价格逻辑
                     return 1000; // 示例价格

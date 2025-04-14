@@ -149,7 +149,7 @@ public class ItemManager : MonoBehaviour
                 {
                     Sprite icon = Resources.Load<Sprite>("Icons/" + dragonEggData.icon);
                     // List<Vector2> hatchedDragons = new List<Vector2> { dragonEggData.bornDragonA, dragonEggData.bornDragonB };
-                    DragonEgg dragonEgg = new DragonEgg(dragonEggData.itemName,type,1,icon,dragonEggData.eggBornTime,dragonEggData.bornDragonId,dragonEggData.bornDragonPro,dragonEggData.id,Item.ItemIDGenerator.GetUniqueID(),dragonEggData.description,dragonEggData.eggModelAdress,dragonEggData.eggPrice);
+                    DragonEgg dragonEgg = new DragonEgg(dragonEggData.itemName,type,1,icon,dragonEggData.eggBornTime,dragonEggData.bornDragonId,dragonEggData.bornDragonPro,dragonEggData.id,Item.ItemIDGenerator.GetUniqueID(),dragonEggData.description,dragonEggData.eggModelAdress,dragonEggData.sellPrice,dragonEggData.listPrice);
                     Inventory.Instance.AddItem(dragonEgg);
                     item = dragonEgg;
                 }
@@ -207,11 +207,12 @@ public class DragonEggData
     // 龙蛋特有属性
     public string eggModelAdress;
     public float eggBornTime;
-    public float eggPrice;
+    public float sellPrice;
+    public float listPrice;
     public string bornDragonId;
     public string bornDragonPro;
     
-    public DragonEggData(int id, string itemName, string icon, string description, string eggModelAdress, float eggBornTime, float eggPrice, string bornDragonId, string bornDragonPro)
+    public DragonEggData(int id, string itemName, string icon, string description, string eggModelAdress, float eggBornTime, float sellPrice,float listPrice, string bornDragonId, string bornDragonPro)
     {
         this.id = id;
         this.itemName = itemName;
@@ -219,7 +220,8 @@ public class DragonEggData
         this.description = description;
         this.eggModelAdress = eggModelAdress;
         this.eggBornTime = eggBornTime;
-        this.eggPrice = eggPrice;
+        this.sellPrice = sellPrice;
+        this.listPrice = listPrice;
         this.bornDragonId = bornDragonId;
         this.bornDragonPro = bornDragonPro;
     }

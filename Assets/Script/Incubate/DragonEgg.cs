@@ -17,8 +17,11 @@ public class DragonEgg : Item
     //龙蛋模型地址
     public string eggModelAdress;
     
-    //龙蛋价格
-    public float eggPrice;
+    //龙蛋直接出售价格
+    public float sellPrice;
+    
+    // 龙蛋上架出售价格
+    public float listPrice;
 
     // 当前孵化状态
     public EggStatus status;
@@ -30,7 +33,7 @@ public class DragonEgg : Item
     public string bornDragonId;
     public string bornDragonPro;
 
-    public DragonEgg(string name, ItemType type, int quantity, Sprite icon,float eggBornTime,string bornDragonId,string bornDragonPro,int id,int itemID,string description,string eggModelAdress,float eggPrice) : base(name, type, quantity, icon,id,itemID,description)
+    public DragonEgg(string name, ItemType type, int quantity, Sprite icon,float eggBornTime,string bornDragonId,string bornDragonPro,int id,int itemID,string description,string eggModelAdress,float sellPrice,float listPrice) : base(name, type, quantity, icon,id,itemID,description)
     {
         // 初始状态为未孵化
         status = EggStatus.NotStarted;
@@ -40,7 +43,8 @@ public class DragonEgg : Item
         this.bornDragonId = bornDragonId;
         this.bornDragonPro = bornDragonPro;
         this.eggModelAdress = eggModelAdress;
-        this.eggPrice = eggPrice;
+        this.sellPrice = sellPrice;
+        this.listPrice = listPrice;
     }
     // private void Start()
     // {

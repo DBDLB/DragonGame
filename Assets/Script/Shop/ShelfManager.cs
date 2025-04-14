@@ -50,7 +50,8 @@ using UnityEngine;
                         // isStackable = item.isStackable.ToString(),
                         dragonEgg.eggModelAdress,
                         dragonEgg.eggBornTime,
-                        dragonEgg.eggPrice,
+                        dragonEgg.sellPrice,
+                        dragonEgg.listPrice,
                         dragonEgg.bornDragonId,
                         dragonEgg.bornDragonPro
                         );
@@ -120,7 +121,8 @@ using UnityEngine;
                         eggData.itemID,
                         eggData.dragonEggs.description,
                         eggData.dragonEggs.eggModelAdress,
-                        eggData.dragonEggs.eggPrice
+                        eggData.dragonEggs.sellPrice,
+                        eggData.dragonEggs.listPrice
                     );
                     egg.quantity = eggData.quantity;
                     foreach (var shelfSlot in shelfSlots)

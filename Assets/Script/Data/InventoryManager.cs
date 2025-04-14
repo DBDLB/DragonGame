@@ -56,7 +56,8 @@ public class InventoryManager : MonoBehaviour
                         // isStackable = item.isStackable.ToString(),
                         dragonEgg.eggModelAdress,
                         dragonEgg.eggBornTime,
-                        dragonEgg.eggPrice,
+                        dragonEgg.sellPrice,
+                        dragonEgg.listPrice,
                         dragonEgg.bornDragonId,
                         dragonEgg.bornDragonPro
                         );
@@ -130,7 +131,8 @@ public class InventoryManager : MonoBehaviour
                         eggData.itemID,
                         eggData.dragonEggs.description,
                         eggData.dragonEggs.eggModelAdress,
-                        eggData.dragonEggs.eggPrice
+                        eggData.dragonEggs.sellPrice,
+                        eggData.dragonEggs.listPrice
                     );
                     egg.quantity = eggData.quantity;
                     Inventory.Instance.AddItem(egg);
@@ -195,7 +197,8 @@ public class InventoryManager : MonoBehaviour
                             Item.ItemIDGenerator.GetUniqueID(),
                             eggData.dragonEggs.description,
                             eggData.dragonEggs.eggModelAdress,
-                            eggData.dragonEggs.eggPrice
+                            eggData.dragonEggs.sellPrice,
+                            eggData.dragonEggs.listPrice
                         );
                         egg.quantity = eggData.quantity;
                         if (egg.id!=0)
