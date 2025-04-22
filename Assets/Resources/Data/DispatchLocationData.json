@@ -1,41 +1,41 @@
 [
-    {
-      "id": 1,
-      "name": "mountains",
-      "icon": "mountains",
-      "description": "山脉",
-      "adventureValue" : 50,
-      "adventureTime": 5,
-      "maxTime": 10,
-      "minTime": 5,
-      "reward": 10,
-      "rewardPro": 0.5,
-      "openConditions": 0
-    },
-    {
-      "id": 2,
-      "name": "jungle",
-      "icon": "jungle",
-      "description": "丛林",
-      "adventureValue" : 300,
-      "adventureTime": 10,
-      "maxTime": 10,
-      "minTime": 5,
-      "reward": 10,
-      "rewardPro": 0.5,
-      "openConditions": 0
-    },
-    {
-      "id": 3,
-      "name": "seabed",
-      "icon": "seabed",
-      "description": "海底",
-      "adventureValue" : 400,
-      "adventureTime": 100,
-      "maxTime": 10,
-      "minTime": 5,
-      "reward": 10,
-      "rewardPro": 0.5,
-      "openConditions": 0
-    }
+  {
+    "id": "1051",
+    "name": "生命山谷外围",
+    "icon": "1051",
+    "description": "祥和的生命山谷外围，冒险的第一个目的地，没什么麻烦的地方，所以也没什么东西。",
+    "adventureValue": "6",
+    "adventureTime": "15",
+    "maxTime": "30",
+    "minTime": "5",
+    "reward": "1011, 1012, 1031, 1032, 1033, 1041, 1045",
+    "rewardPro": "50, 20, 50, 100, 100, 20, 20",
+    "openConditions": "0"
+  },
+  {
+    "id": "1052",
+    "name": "生命山谷中层",
+    "icon": "1052",
+    "description": "祥和的生命山谷中层，冒险开始有意思起来了。",
+    "adventureValue": "8",
+    "adventureTime": "30",
+    "maxTime": "60",
+    "minTime": "5",
+    "reward": "1011, 1012, 1031, 1032, 1033, 1041, 1045",
+    "rewardPro": "50, 50, 100, 80, 80, 30, 30",
+    "openConditions": "1061"
+  },
+  {
+    "id": "1053",
+    "name": "生命山谷深处",
+    "icon": "1053",
+    "description": "祥和的生命山谷深处，能找到一些好东西，似乎掩藏着一处入口。",
+    "adventureValue": "15",
+    "adventureTime": "60",
+    "maxTime": "120",
+    "minTime": "5",
+    "reward": "1011, 1012, 1031, 1032, 1033, 1041, 1045, 1046",
+    "rewardPro": "50, 50, 100, 80, 80, 80, 40, 20",
+    "openConditions": "1062"
+  }
 ]

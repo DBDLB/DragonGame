@@ -37,6 +37,7 @@ using UnityEngine;
             if (item == null) continue;
             switch (item.itemType)
             {
+                // 龙蛋
                 case ItemType.DragonEgg:
                     DragonEgg dragonEgg = item as DragonEgg;
                     DragonEggData eggData = new DragonEggData
@@ -57,7 +58,7 @@ using UnityEngine;
                         );
                     dragonEggsList.Add(new InventoryManager.InventoryDragonEggData() {itemID = item.itemID, quantity = item.quantity,dragonEggs = eggData});
                     break;
-                
+                // 龙
                 case ItemType.Dragon:
                     Dragon dragon = item as Dragon;
                     DragonData dragonData = new DragonData
@@ -77,8 +78,25 @@ using UnityEngine;
                     dragonsList.Add(new InventoryManager.InventoryDragonData() {itemID = item.itemID, quantity = item.quantity,dragons = dragonData});
                     break;
                 
+                // 战利品
                 case ItemType.SpoilsOfWar:
-                    // 类似实现战利品数据保存
+                    SpoilsOfWar spoilsOfWar = item as SpoilsOfWar;
+                    SpoilsOfWarData spoilsData = new SpoilsOfWarData
+                    (
+                        item.id,
+                        item.itemName,
+                        item.icon.name,
+                        spoilsOfWar.description,
+                        spoilsOfWar.sellPrice,
+                        spoilsOfWar.listPrice,
+                        spoilsOfWar.level
+                    );
+                    spoilsList.Add(new InventoryManager.InventorySpoilsOfWarData() 
+                    { 
+                        itemID = item.itemID, 
+                        quantity = item.quantity, 
+                        spoilsOfWar = spoilsData 
+                    });
                     break;
             }
         }
@@ -169,7 +187,35 @@ using UnityEngine;
                 }
             }
         
-            // 加载战利品...
+            // 加载战利品
+            if (inventoryData.inventorySpoilsOfWar != null)
+            {
+                foreach (var spoilsData in inventoryData.inventorySpoilsOfWar)
+                {
+                    Sprite icon = Resources.Load<Sprite>("Icons/" + spoilsData.spoilsOfWar.icon);
+                    SpoilsOfWar spoils = new SpoilsOfWar(
+                        spoilsData.spoilsOfWar.itemName,
+                        ItemType.SpoilsOfWar,
+                        1,
+                        icon,
+                        spoilsData.spoilsOfWar.sellPrice,
+                        spoilsData.spoilsOfWar.listPrice,
+                        spoilsData.spoilsOfWar.level,
+                        spoilsData.spoilsOfWar.id,
+                        spoilsData.itemID,
+                        spoilsData.spoilsOfWar.description
+                    );
+                    spoils.quantity = spoilsData.quantity;
+                    foreach (var shelfSlot in shelfSlots)
+                    {
+                        if (shelfSlot.GetCurrentItem() == null)
+                        {
+                            shelfSlot.PlaceItem(spoils);
+                            break;
+                        }
+                    }
+                }
+            }
         
             Debug.Log("货架数据已加载");
         }

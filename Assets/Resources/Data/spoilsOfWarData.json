@@ -1,44 +1,29 @@
 [
-    {
-      "id": 1,
-      "itemName": "dragonEgg_1",
-      "description": "egg.",
-      "icon": "dragonEgg_1",
-      "isStackable": false,
-      "quantity": 50,
-      "eggBornTime": 10,
-      "hatchedDragonId": 4
-    },
-    {
-      "id": 2,
-      "itemName": "dragonEgg_2",
-      "description": "egg.",
-      "icon": "dragonEgg_2",
-      "isStackable": false,
-      "quantity": 30,
-      "eggBornTime": 20,
-      "hatchedDragonId": 0
-    },
-    {
-      "id": 3,
-      "itemName": "dragonEgg_3",
-      "description": "egg.",
-      "icon": "dragonEgg_3",
-      "isStackable": false,
-      "quantity": 1,
-      "eggBornTime": 30,
-      "hatchedDragonId": 0
-    },
-    {
-      "id": 4,
-      "itemName": "dragon_1",
-      "description": "dragon.",
-      "icon": "dragon_1",
-      "isStackable": false,
-      "quantity": 200,
-      "health": 100,
-      "attack": 10,
-      "defense": 5,
-      "speed": 5
-    }
+  {
+    "id": "1031",
+    "itName": "破破烂烂的武器",
+    "icon": "1031",
+    "description": "不知道谁冒险时落下了，不值什么钱，但好歹也能卖点。",
+    "level": "绿",
+    "listPrice": "10",
+    "sellPrice": "2"
+  },
+  {
+    "id": "1032",
+    "itName": "用过的药剂瓶子",
+    "icon": "1032",
+    "description": "被人用过的瓶子，捡回来擦一擦还能用。",
+    "level": "绿",
+    "listPrice": "5",
+    "sellPrice": "1"
+  },
+  {
+    "id": "1033",
+    "itName": "破破烂烂的鞋子",
+    "icon": "1033",
+    "description": "有人跑丢了一只鞋？",
+    "level": "绿",
+    "listPrice": "5",
+    "sellPrice": "1"
+  }
 ]

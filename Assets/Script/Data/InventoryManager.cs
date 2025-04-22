@@ -84,7 +84,18 @@ public class InventoryManager : MonoBehaviour
                     break;
                 
                 case ItemType.SpoilsOfWar:
-                    // 类似实现战利品数据保存
+                    SpoilsOfWar spoilsOfWar = item as SpoilsOfWar;
+                    SpoilsOfWarData spoilsData = new SpoilsOfWarData
+                    (
+                        item.id,
+                        item.itemName,
+                        item.icon.name,
+                        spoilsOfWar.description,
+                        spoilsOfWar.sellPrice,
+                        spoilsOfWar.listPrice,
+                        spoilsOfWar.level
+                    );
+                    spoilsList.Add(new InventorySpoilsOfWarData() { itemID = item.itemID, quantity = item.quantity, spoilsOfWar = spoilsData });
                     break;
             }
         }
@@ -166,6 +177,27 @@ public class InventoryManager : MonoBehaviour
             }
         
             // 加载战利品...
+            if (inventoryData.inventorySpoilsOfWar != null)
+            {
+                foreach (var spoilsData in inventoryData.inventorySpoilsOfWar)
+                {
+                    Sprite icon = Resources.Load<Sprite>("Icons/" + spoilsData.spoilsOfWar.icon);
+                    SpoilsOfWar spoils = new SpoilsOfWar(
+                        spoilsData.spoilsOfWar.itemName,
+                        ItemType.SpoilsOfWar,
+                        spoilsData.quantity,
+                        icon,
+                        spoilsData.spoilsOfWar.sellPrice,
+                        spoilsData.spoilsOfWar.listPrice,
+                        spoilsData.spoilsOfWar.level,
+                        spoilsData.spoilsOfWar.id,
+                        spoilsData.itemID,
+                        spoilsData.spoilsOfWar.description
+                    );
+                    spoils.quantity = spoilsData.quantity;
+                    Inventory.Instance.AddItem(spoils);
+                }
+            }
         
             Debug.Log("背包数据已加载");
         }

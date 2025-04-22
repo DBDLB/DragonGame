@@ -8259,6 +8259,18 @@ MonoBehaviour:
   dragonImage: {fileID: 1470582024}
   showSpoilsOfWar: {fileID: 516319635}
   defaultSprite: {fileID: 21300000, guid: 00b0d2c2b652dc941991e84c71321a0f, type: 3}
+  SelectedLocation:
+    id: 0
+    name: 
+    icon: 
+    description: 
+    adventureValue: 0
+    adventureTime: 0
+    maxTime: 0
+    minTime: 0
+    reward: 
+    rewardPro: 
+    openConditions: 0
 --- !u!1 &878538697
 GameObject:
   m_ObjectHideFlags: 0
@@ -12455,7 +12467,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 22, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 599.7, y: 270}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &1451134881
@@ -15689,7 +15701,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 11}
+  m_AnchoredPosition: {x: 56, y: 11}
   m_SizeDelta: {x: 662.3, y: 397.361}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1896620618

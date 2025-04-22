@@ -136,6 +136,36 @@ public class ItemManager : MonoBehaviour
         Debug.LogWarning($"Item with ID {id} and type {itemType} not found!");
         return null;
     }
+    
+    public Item InstantiateItem(int id)
+    {
+        // 获取前三位数
+        int typeCode = id / 10;  // 先除以10去掉最后一位
+        while (typeCode >= 1000)  // 如果超过3位，继续除以10
+        {
+            typeCode /= 10;
+        }
+
+        // 根据前三位确定物品类型
+        ItemType type;
+        switch (typeCode)
+        {
+            case 101:  // 龙蛋
+                type = ItemType.DragonEgg;
+                break;
+            case 102:  // 龙
+                type = ItemType.Dragon;
+                break;
+            case 103:  // 战利品
+                type = ItemType.SpoilsOfWar;
+                break;
+            default:
+                Debug.LogWarning($"Unknown item type code: {typeCode} for ID: {id}");
+                return null;
+        }
+
+        return InstantiateItem(id, type);
+    }
 
     // 实例化道具
     public Item InstantiateItem(int id, ItemType type)
@@ -173,11 +203,21 @@ public class ItemManager : MonoBehaviour
                 if (spoilsOfWarData != null)
                 {
                     Sprite icon = Resources.Load<Sprite>("Icons/" + spoilsOfWarData.icon);
-                    // 实例化资源
+                    Item spoilsOfWar = new SpoilsOfWar(
+                        spoilsOfWarData.itemName,
+                        type,
+                        1,
+                        icon,
+                        spoilsOfWarData.sellPrice,
+                        spoilsOfWarData.listPrice,
+                        spoilsOfWarData.level,
+                        spoilsOfWarData.id,
+                        Item.ItemIDGenerator.GetUniqueID(),
+                        spoilsOfWarData.description
+                    );
+                    Inventory.Instance.AddItem(spoilsOfWar);
+                    item = spoilsOfWar;
                 }
-                break;
-            default:
-                Debug.LogWarning("Unknown item type: " + type);
                 break;
         }
         return item;
@@ -282,8 +322,18 @@ public class SpoilsOfWarData
     public string description;
     
     // 战利品特有属性
-    public string isStackable;
-    // 战利品特有属性
-    public int value;
-    // 其他战利品特有属性...
+    public float sellPrice;
+    public float listPrice;
+    public String level;
+    
+    public SpoilsOfWarData(int id, string itemName, string icon, string description, float sellPrice, float listPrice, string level)
+    {
+        this.id = id;
+        this.itemName = itemName;
+        this.icon = icon;
+        this.description = description;
+        this.sellPrice = sellPrice;
+        this.listPrice = listPrice;
+        this.level = level;
+    }
 }

@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 
 public class DispatchManager : MonoBehaviour
@@ -151,7 +152,7 @@ public class DispatchManager : MonoBehaviour
 
     #endregion
 
-    
+    public DispatchLocation.Location SelectedLocation;
     public void StartDispatch()
     {
         if (selectedDragon == null||selectedDragon.id == 0||locationID==0)
@@ -161,6 +162,7 @@ public class DispatchManager : MonoBehaviour
         }
         DispatchDefinite.Instance.textMeshProUGUI.text = "加油打气！";
         DispatchLocation.Location location = dispatchLocation.allLocations.Find(l => l.id == locationID);
+        SelectedLocation = location;
         if (location == null) return;
 
         float DispatchTime = CalculateDispatchTime(location, selectedDragon);
@@ -214,7 +216,9 @@ public class DispatchManager : MonoBehaviour
         float speedMultiplier = Mathf.Max((float)dragon.speed / 100,1);
         // 派遣时间 = （基础值 / （龙的总属性 * 速度乘数）） * 基础时间
         float DispatchTime = (location.baseValue / (sumStats * speedMultiplier)) * location.baseTime;
-        return Mathf.Max(DispatchTime, 1); // 确保最小时间为1秒
+        DispatchTime = Mathf.Max(DispatchTime, location.minTime); // 确保最小时间
+        DispatchTime = Mathf.Min(DispatchTime, location.maxTime); // 确保最大时间
+        return DispatchTime;
     }
     
     //获取战利品
@@ -226,15 +230,55 @@ public class DispatchManager : MonoBehaviour
     private int minID = 1011;                 // ID 范围最小值
     private int maxID = 1012;               // ID 范围最大值
     // 随机选择一个 ID
-    List<Item> SelectRandomID()
+    private List<Item> SelectRandomID()
     {
         List<Item> items = new List<Item>();
-        for (int i = 0; i < Random.Range(2, 10); i++)
+        DispatchLocation.Location location = SelectedLocation;
+    
+        // 将字符串转换为数组
+        string[] rewardArray = location.reward.Split(',').Select(s => s.Trim()).ToArray();
+        string[] rewardProArray = location.rewardPro.Split(',').Select(s => s.Trim()).ToArray();
+    
+        // 生成2-10个随机物品
+        int itemCount = Random.Range(2, 10);
+        for (int i = 0; i < itemCount; i++)
         {
-            int selectedID = Random.Range(minID, maxID+1);
-            Debug.Log("Selected ID: " + selectedID);
-            items.Add(ItemManager.Instance.InstantiateItem(selectedID,ItemType.DragonEgg));
+            // 计算总权重
+            float totalWeight = 0;
+            for (int j = 0; j < rewardProArray.Length; j++)
+            {
+                if (float.TryParse(rewardProArray[j], out float weight))
+                {
+                    totalWeight += weight;
+                }
+            }
+
+            // 生成随机值
+            float randomValue = Random.Range(0, totalWeight);
+        
+            // 根据权重选择物品
+            float currentWeight = 0;
+            for (int j = 0; j < rewardArray.Length; j++)
+            {
+                if (float.TryParse(rewardProArray[j], out float weight))
+                {
+                    currentWeight += weight;
+                    if (currentWeight >= randomValue)
+                    {
+                        if (int.TryParse(rewardArray[j], out int itemID))
+                        {
+                            Item item = ItemManager.Instance.InstantiateItem(itemID);
+                            if (item != null)
+                            {
+                                items.Add(item);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
         }
+    
         return items;
     }
 
@@ -330,8 +374,8 @@ public class DispatchManager : MonoBehaviour
             public float adventureTime;
             public float maxTime;
             public float minTime;
-            public int reward;
-            public float rewardPro;
+            public String reward;
+            public String rewardPro;
             public int openConditions;
             
             // 计算派遣时间相关属性
