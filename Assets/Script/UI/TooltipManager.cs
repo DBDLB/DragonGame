@@ -64,8 +64,55 @@ using UnityEngine;
             {
                 if (tooltipPanel.activeSelf && tooltipActive)
                 {
-                    Vector3 offset = new Vector3((buttonTransform.GetComponent<RectTransform>().sizeDelta).x / 2 * buttonTransform.GetComponent<RectTransform>().localScale.x, 0, 0);
-                    tooltipPanel.transform.position = buttonTransform.position - (Vector3)tooltipPanel.GetComponent<RectTransform>().sizeDelta / 2 - offset;
+                    RectTransform buttonRect = buttonTransform.GetComponent<RectTransform>();
+                    RectTransform tooltipRect = tooltipPanel.GetComponent<RectTransform>();
+
+                    // 获取按钮的世界空间尺寸（考虑缩放）
+                    Vector3[] buttonCorners = new Vector3[4];
+                    buttonRect.GetWorldCorners(buttonCorners);
+                    float buttonWidth = Vector3.Distance(buttonCorners[0], buttonCorners[3]);
+                    float buttonHeight = Vector3.Distance(buttonCorners[0], buttonCorners[1]);
+
+                    // 获取tooltip的世界空间尺寸
+                    Vector3[] tooltipCorners = new Vector3[4];
+                    tooltipRect.GetWorldCorners(tooltipCorners);
+                    float tooltipWidth = Vector3.Distance(tooltipCorners[0], tooltipCorners[3]);
+                    float tooltipHeight = Vector3.Distance(tooltipCorners[0], tooltipCorners[1]);
+
+                    // 获取按钮在屏幕上的位置
+                    Vector3 screenPoint = Camera.main.WorldToScreenPoint(buttonTransform.position);
+
+                    // 设置基础偏移量
+                    float padding = 5f;
+
+                    // 计算新位置（考虑缩放）
+                    Vector3 newPosition = buttonTransform.position;
+
+                    // 水平位置调整
+                    if (screenPoint.x + tooltipWidth + padding < Screen.width)
+                    {
+                        // 显示在右侧
+                        newPosition.x += (buttonWidth / 2 + tooltipWidth / 2 + padding);
+                    }
+                    else
+                    {
+                        // 显示在左侧
+                        newPosition.x -= (buttonWidth / 2 + tooltipWidth / 2 + padding);
+                    }
+
+                    // 垂直位置调整
+                    if (screenPoint.y + tooltipHeight/2 > Screen.height)
+                    {
+                        // 如果tooltip会超出屏幕上方，向下调整
+                        newPosition.y -= (tooltipHeight - buttonHeight) / 1.2f;
+                    }
+                    else if (screenPoint.y - tooltipHeight/2 < 0)
+                    {
+                        // 如果tooltip会超出屏幕下方，向上调整
+                        newPosition.y += (tooltipHeight - buttonHeight) / 1.2f;
+                    }
+
+                    tooltipPanel.transform.position = newPosition;
                     tooltipActive = false;
                 }
             }

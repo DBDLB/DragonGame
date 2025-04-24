@@ -135,7 +135,7 @@ using TMPro;
         {
             TooltipManager.Instance.ShowTooltip(item, this.transform);
             TooltipManager.Instance.sellItemBotton.SetActive(true);
-            if (item.itemType == ItemType.GameProps)
+            if (item.itemType == ItemType.Props)
             {
                 TooltipManager.Instance.useGamePropsBotton.SetActive(true);
             }

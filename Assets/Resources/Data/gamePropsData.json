@@ -1,0 +1,99 @@
+[
+  {
+    "id": "1041",
+    "Name": "低级催产素",
+    "icon": "1041",
+    "description": "快快长大吧，使用后减少30秒孵化时间。",
+    "level": "绿",
+    "listPrice": "20",
+    "sellPrice": "4",
+    "itemEffect": "1",
+    "itemEffect1": "30",
+    "itemEffect2": "0"
+  },
+  {
+    "id": "1042",
+    "Name": "中级催产素",
+    "icon": "1042",
+    "description": "快快长大吧，使用后减少300秒孵化时间。",
+    "level": "银",
+    "listPrice": "200",
+    "sellPrice": "40",
+    "itemEffect": "1",
+    "itemEffect1": "300",
+    "itemEffect2": "0"
+  },
+  {
+    "id": "1043",
+    "Name": "高级催产素",
+    "icon": "1043",
+    "description": "快快长大吧，使用后减少1200秒孵化时间。",
+    "level": "银",
+    "listPrice": "800",
+    "sellPrice": "160",
+    "itemEffect": "1",
+    "itemEffect1": "1200",
+    "itemEffect2": "0"
+  },
+  {
+    "id": "1044",
+    "Name": "特级催产素",
+    "icon": "1044",
+    "description": "快快长大吧，使用后使孵化立即完成。",
+    "level": "金",
+    "listPrice": "2000",
+    "sellPrice": "400",
+    "itemEffect": "1",
+    "itemEffect1": "9999999",
+    "itemEffect2": "0"
+  },
+  {
+    "id": "1045",
+    "Name": "小钱袋",
+    "icon": "1045",
+    "description": "出游时捡到的意外之喜，使用后直接获得20金币。",
+    "level": "绿",
+    "listPrice": "0",
+    "sellPrice": "0",
+    "itemEffect": "2",
+    "itemEffect1": "0",
+    "itemEffect2": "20"
+  },
+  {
+    "id": "1046",
+    "Name": "中钱袋",
+    "icon": "1046",
+    "description": "出游时捡到的意外之喜，使用后直接获得200金币。",
+    "level": "银",
+    "listPrice": "0",
+    "sellPrice": "0",
+    "itemEffect": "2",
+    "itemEffect1": "0",
+    "itemEffect2": "200"
+  },
+  {
+    "id": "1047",
+    "Name": "大钱袋",
+    "icon": "1047",
+    "description": "出游时捡到的意外之喜，使用后直接获得800金币。",
+    "level": "银",
+    "listPrice": "0",
+    "sellPrice": "0",
+    "itemEffect": "2",
+    "itemEffect1": "0",
+    "itemEffect2": "800"
+  },
+  {
+    "id": "1048",
+    "Name": "特大钱袋",
+    "icon": "1048",
+    "description": "出游时捡到的意外之喜，使用后直接获得2000金币。",
+    "level": "金",
+    "listPrice": "0",
+    "sellPrice": "0",
+    "itemEffect": "2",
+    "itemEffect1": "0",
+    "itemEffect2": "2000"
+  }
+]
+

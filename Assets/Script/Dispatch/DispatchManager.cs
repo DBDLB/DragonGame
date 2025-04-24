@@ -191,20 +191,19 @@ public class DispatchManager : MonoBehaviour
         }
         dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = "任务完成！";
         task.isCompleted = true;
-        OnDispatchComplete(task);
+        getSpoilsOfWar = true;
+        dispatchSlider.sprite = defaultSprite;
+        dispatchSlider.material.SetColor("_Color", new Color(3, 3, 3, 1));
     }
 
-    private void OnDispatchComplete(DispatchTask task)
+    public void OnDispatchComplete(DispatchTask task)
     {
         Debug.Log($"派遣完成！{task.assignedDragon.itemName} 从 {task.locationID} 归来，获得战利品！");
         selectedDragon = null;
-        dragonImage.sprite = null;
+        dragonImage.color = new Color(0, 0, 0, 0);
         locationID = 0;
-        dispatchSlider.sprite = defaultSprite;
-        dispatchSlider.material.SetColor("_Color", new Color(3, 3, 3, 1));
         dispatchSlider.GetComponent<Button>().interactable = false;
         DispatchDefinite.Instance.textMeshProUGUI.text = "派遣完成！";
-        getSpoilsOfWar = true;
         // 处理战利品奖励逻辑
         activeTasks.Remove(task);
     }
@@ -227,8 +226,8 @@ public class DispatchManager : MonoBehaviour
         showSpoilsOfWar.GetComponent<ShowSpoilsOfWar>().items = SelectRandomID();
     }
     
-    private int minID = 1011;                 // ID 范围最小值
-    private int maxID = 1012;               // ID 范围最大值
+    // private int minID = 1011;                 // ID 范围最小值
+    // private int maxID = 1012;               // ID 范围最大值
     // 随机选择一个 ID
     private List<Item> SelectRandomID()
     {
@@ -320,7 +319,10 @@ public class DispatchManager : MonoBehaviour
                 Dragon assignedDragon = Inventory.Instance.GetByItemID(taskData.itemID) as Dragon;
                 if (assignedDragon != null)
                 {
+                    dragonImage.color = new Color(1, 1, 1, 1);
+                    dragonImage.sprite = assignedDragon.icon;
                     DispatchTask task = new DispatchTask(taskData.locationID, assignedDragon, taskData.remainingTime, taskData.totalTime, taskData.isCompleted);
+                    SelectedLocation = dispatchLocation.allLocations.Find(l => l.id == task.locationID);
                     activeTasks.Add(task);
 
                     if (!task.isCompleted)
@@ -328,6 +330,14 @@ public class DispatchManager : MonoBehaviour
                         newTask = task;
                         DispatchDefinite.Instance.textMeshProUGUI.text = "加油打气！";
                         StartCoroutine(DispatchCountdown(task));
+                    }
+                    else
+                    {
+                        newTask = task;
+                        DispatchDefinite.Instance.textMeshProUGUI.text = "任务完成！";
+                        dispatchSlider.material.SetFloat("_Progress", 1);
+                        dispatchSlider.material.SetColor("_Color", new Color(3, 3, 3, 1));
+                        getSpoilsOfWar = true;
                     }
                 }
             }

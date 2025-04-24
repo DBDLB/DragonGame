@@ -36,6 +36,21 @@ public class PlayerDataManager : MonoBehaviour
         saveFilePath = Application.persistentDataPath + "/playerData.json";
         LoadDiscoveredItems();
     }
+    
+    public void AddCoins(int amount)
+    {
+        if (amount > 0)
+        {
+            coin += amount;
+            SavePlayerData();
+            // 可以在这里触发UI更新等操作
+            Debug.Log($"Added {amount} coins. New balance: {coin}");
+        }
+        else
+        {
+            Debug.LogWarning("Attempted to add invalid coin amount: " + amount);
+        }
+    }
 
     // 检查物品是否为首次获得
     public bool IsNewDiscovery(int id, ItemType itemType)

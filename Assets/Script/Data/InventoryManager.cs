@@ -37,6 +37,7 @@ public class InventoryManager : MonoBehaviour
         List<InventoryDragonEggData> dragonEggsList = new List<InventoryDragonEggData>();
         List<InventoryDragonData> dragonsList = new List<InventoryDragonData>();
         List<InventorySpoilsOfWarData> spoilsList = new List<InventorySpoilsOfWarData>();
+        List<InventoryPropsData> propsList = new List<InventoryPropsData>();
 
         foreach (var item in Inventory.Instance.items)
         {
@@ -97,6 +98,28 @@ public class InventoryManager : MonoBehaviour
                     );
                     spoilsList.Add(new InventorySpoilsOfWarData() { itemID = item.itemID, quantity = item.quantity, spoilsOfWar = spoilsData });
                     break;
+                
+                case ItemType.Props:
+                    Props props = item as Props;
+                    PropsData propsData = new PropsData(
+                        item.id,
+                        item.itemName,
+                        item.icon.name,
+                        props.description,
+                        props.level,
+                        props.listPrice,
+                        props.sellPrice,
+                        props.itemEffect,
+                        props.itemEffect1,
+                        props.itemEffect2
+                    );
+                    propsList.Add(new InventoryPropsData() 
+                    { 
+                        itemID = item.itemID, 
+                        quantity = item.quantity, 
+                        props = propsData 
+                    });
+                    break;
             }
         }
         
@@ -104,7 +127,8 @@ public class InventoryManager : MonoBehaviour
         {
             inventoryDragonEggs = dragonEggsList.ToArray(),
             inventoryDragons = dragonsList.ToArray(),
-            inventorySpoilsOfWar = spoilsList.ToArray()
+            inventorySpoilsOfWar = spoilsList.ToArray(),
+            inventoryProps = propsList.ToArray()
         };
         string json = JsonUtility.ToJson(inventoryDataList, true);  // 将背包对象序列化为 JSON 字符串
         File.WriteAllText(filePath, json);  // 写入文件
@@ -199,6 +223,31 @@ public class InventoryManager : MonoBehaviour
                 }
             }
         
+            // 加载道具
+            if (inventoryData.inventoryProps != null)
+            {
+                foreach (var propsData in inventoryData.inventoryProps)
+                {
+                    Sprite icon = Resources.Load<Sprite>("Icons/" + propsData.props.icon);
+                    Props props = new Props(
+                        propsData.props.itemName,
+                        ItemType.Props,
+                        propsData.quantity,
+                        icon,
+                        propsData.props.sellPrice,
+                        propsData.props.listPrice,
+                        propsData.props.level,
+                        propsData.props.id,
+                        propsData.itemID,
+                        propsData.props.description,
+                        propsData.props.itemEffect,
+                        propsData.props.itemEffect1,
+                        propsData.props.itemEffect2
+                    );
+                    props.quantity = propsData.quantity;
+                    Inventory.Instance.AddItem(props);
+                }
+            }
             Debug.Log("背包数据已加载");
         }
         else
@@ -301,6 +350,7 @@ public class InventoryManager : MonoBehaviour
         public InventoryDragonEggData[] inventoryDragonEggs;
         public InventoryDragonData[] inventoryDragons;
         public InventorySpoilsOfWarData[] inventorySpoilsOfWar;
+        public InventoryPropsData[] inventoryProps;
     }
 
     [System.Serializable]
@@ -325,6 +375,14 @@ public class InventoryManager : MonoBehaviour
         public int itemID;
         public int quantity;
         public SpoilsOfWarData spoilsOfWar;
+    }
+    
+    [System.Serializable]
+    public class InventoryPropsData
+    {
+        public int itemID;
+        public int quantity;
+        public PropsData props;
     }
     
     

@@ -30,7 +30,9 @@ using UnityEngine;
         List<InventoryManager.InventoryDragonEggData> dragonEggsList = new List<InventoryManager.InventoryDragonEggData>();
         List<InventoryManager.InventoryDragonData> dragonsList = new List<InventoryManager.InventoryDragonData>();
         List<InventoryManager.InventorySpoilsOfWarData> spoilsList = new List<InventoryManager.InventorySpoilsOfWarData>();
+        List<InventoryManager.InventoryPropsData> propsList = new List<InventoryManager.InventoryPropsData>();
 
+        
         foreach (var shelfSlot in shelfSlots)
         {
             Item item = shelfSlot.GetCurrentItem();
@@ -98,6 +100,28 @@ using UnityEngine;
                         spoilsOfWar = spoilsData 
                     });
                     break;
+                
+                case ItemType.Props:
+                    Props props = item as Props;
+                    PropsData propsData = new PropsData(
+                        item.id,
+                        item.itemName,
+                        item.icon.name,
+                        props.description,
+                        props.level,
+                        props.listPrice,
+                        props.sellPrice,
+                        props.itemEffect,
+                        props.itemEffect1,
+                        props.itemEffect2
+                    );
+                    propsList.Add(new InventoryManager.InventoryPropsData()
+                    {
+                        itemID = item.itemID,
+                        quantity = item.quantity,
+                        props = propsData
+                    });
+                    break;
             }
         }
         
@@ -105,7 +129,8 @@ using UnityEngine;
         {
             inventoryDragonEggs = dragonEggsList.ToArray(),
             inventoryDragons = dragonsList.ToArray(),
-            inventorySpoilsOfWar = spoilsList.ToArray()
+            inventorySpoilsOfWar = spoilsList.ToArray(),
+            inventoryProps = propsList.ToArray()
         };
         string json = JsonUtility.ToJson(inventoryDataList, true);  // 将背包对象序列化为 JSON 字符串
         File.WriteAllText(filePath, json);  // 写入文件
@@ -216,6 +241,39 @@ using UnityEngine;
                     }
                 }
             }
+            
+            // 加载道具
+            if (inventoryData.inventoryProps != null)
+            {
+                foreach (var propsData in inventoryData.inventoryProps)
+                {
+                    Sprite icon = Resources.Load<Sprite>("Icons/" + propsData.props.icon);
+                    Props props = new Props(
+                        propsData.props.itemName,
+                        ItemType.Props,
+                        1,
+                        icon,
+                        propsData.props.sellPrice,
+                        propsData.props.listPrice,
+                        propsData.props.level,
+                        propsData.props.id,
+                        propsData.itemID,
+                        propsData.props.description,
+                        propsData.props.itemEffect,
+                        propsData.props.itemEffect1,
+                        propsData.props.itemEffect2
+                    );
+                    props.quantity = propsData.quantity;
+                    foreach (var shelfSlot in shelfSlots)
+                    {
+                        if (shelfSlot.GetCurrentItem() == null)
+                        {
+                            shelfSlot.PlaceItem(props);
+                            break;
+                        }
+                    }
+                }
+            }
         
             Debug.Log("货架数据已加载");
         }
@@ -227,6 +285,7 @@ using UnityEngine;
         public InventoryManager.InventoryDragonEggData[] inventoryDragonEggs;
         public InventoryManager.InventoryDragonData[] inventoryDragons;
         public InventoryManager.InventorySpoilsOfWarData[] inventorySpoilsOfWar;
+        public InventoryManager.InventoryPropsData[] inventoryProps;  // 添加道具数据
     }
         // 添加更多货架管理功能，如收入计算、自动销售等
     }

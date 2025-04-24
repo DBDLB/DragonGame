@@ -60,6 +60,7 @@ public class DispatchDefinite : MonoBehaviour
     {
         if (DispatchManager.Instance.getSpoilsOfWar)
         {
+            DispatchManager.Instance.OnDispatchComplete(DispatchManager.Instance.newTask);
             DispatchManager.Instance.GetSpoilsOfWar();
             DispatchManager.Instance.getSpoilsOfWar = false;
             DispatchManager.Instance.showSpoilsOfWar.SetActive(true);
@@ -73,7 +74,7 @@ public class DispatchDefinite : MonoBehaviour
             return;
         }
 
-        if (clickCount<=2)
+        if (clickCount<=2&&DispatchManager.Instance.selectedDragon != null&&DispatchManager.Instance.selectedDragon.id != 0&&DispatchManager.Instance.locationID!=0)
         {
             ProcessButtonAction();
             clickCount++;

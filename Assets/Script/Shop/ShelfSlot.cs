@@ -82,8 +82,10 @@ using UnityEngine;
                     DragonEgg egg = item as DragonEgg;
                     return Mathf.RoundToInt(egg.listPrice);
                 case ItemType.Dragon:
-                    // 为龙设置价格逻辑
-                    return 1000; // 示例价格
+                    return 1000;
+                case ItemType.Props:
+                    Props props = item as Props;
+                    return Mathf.RoundToInt(props.listPrice);
                 default:
                     return 100;
             }

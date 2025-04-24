@@ -39,6 +39,7 @@ public class DragonButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         // ShowDragonAttribute.Instance.ShowDragonUI(item);
         DispatchManager.Instance.selectedDragon = item;
         DispatchManager.Instance.dragonImage.sprite = item.icon;
+        DispatchManager.Instance.dragonImage.color = Color.white;
         // DispatchManager.Instance.dragonImage.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "龙出行中";
     }
 }

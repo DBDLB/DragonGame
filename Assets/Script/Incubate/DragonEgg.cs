@@ -63,6 +63,29 @@ public class DragonEgg : Item
     {
         return Time.time - incubationStartTime >= eggBornTime;
     }
+    
+    // 减少孵化时间
+    public void ReduceHatchTime(float reduceTime)
+    {
+        // 检查龙蛋是否正在孵化
+        if (status == EggStatus.InProgress)
+        {
+            // 计算剩余孵化时间
+            float remainingTime = eggBornTime - (Time.time - incubationStartTime);
+        
+            // 计算新的剩余时间
+            float newRemainingTime = Mathf.Max(0, remainingTime - reduceTime);
+        
+            // 更新孵化开始时间，以反映减少的时间
+            incubationStartTime = Time.time - (eggBornTime - newRemainingTime);
+        
+            // 如果减少后的时间小于等于0，立即完成孵化
+            if (newRemainingTime <= 0)
+            {
+                IncubationUI.Instance.GetHatchedDragon();
+            }
+        }
+    }
 
     // 完成孵化，生成龙
     public Dragon HatchEgg()

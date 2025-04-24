@@ -12,6 +12,7 @@ public class ItemManager : MonoBehaviour
     private Dictionary<int, DragonEggData> dragonEggDatabase = new Dictionary<int, DragonEggData>();
     private Dictionary<int, DragonData> dragonDatabase = new Dictionary<int, DragonData>();
     private Dictionary<int, SpoilsOfWarData> spoilsOfWarDatabase = new Dictionary<int, SpoilsOfWarData>();
+    private Dictionary<int, PropsData> propsDatabase = new Dictionary<int, PropsData>();
     
     public static ItemManager instance;
     public static ItemManager Instance
@@ -47,6 +48,9 @@ public class ItemManager : MonoBehaviour
         
         // 加载战利品数据
         LoadSpoilsOfWarData();
+        
+        // 加载道具数据
+        LoadPropsData();
     }
     
     [System.Serializable]
@@ -114,6 +118,24 @@ public class ItemManager : MonoBehaviour
             Debug.LogError("Spoils of War JSON file not found at: " + filePath);
         }
     }
+    
+    void LoadPropsData()
+    {
+        string filePath = "Data/gamePropsData";  // 道具JSON文件
+        TextAsset jsonText = Resources.Load<TextAsset>(filePath);
+        if (jsonText)
+        {
+            PropsData[] itemArray = JsonConvert.DeserializeObject<PropsData[]>(jsonText.ToString());
+            foreach (var item in itemArray)
+            {
+                propsDatabase.Add(item.id, item);
+            }
+        }
+        else
+        {
+            Debug.LogError("Props JSON file not found at: " + filePath);
+        }
+    }
 
 // 根据道具ID和类型获取道具数据
     public object GetItemByID(int id, ItemType itemType)
@@ -131,6 +153,10 @@ public class ItemManager : MonoBehaviour
             case ItemType.SpoilsOfWar:
                 if (spoilsOfWarDatabase.ContainsKey(id))
                     return spoilsOfWarDatabase[id];
+                break;
+            case ItemType.Props:
+                if (propsDatabase.ContainsKey(id))
+                    return propsDatabase[id];
                 break;
         }
         Debug.LogWarning($"Item with ID {id} and type {itemType} not found!");
@@ -158,6 +184,9 @@ public class ItemManager : MonoBehaviour
                 break;
             case 103:  // 战利品
                 type = ItemType.SpoilsOfWar;
+                break;
+            case 104:  // 道具
+                type = ItemType.Props;
                 break;
             default:
                 Debug.LogWarning($"Unknown item type code: {typeCode} for ID: {id}");
@@ -217,6 +246,30 @@ public class ItemManager : MonoBehaviour
                     );
                     Inventory.Instance.AddItem(spoilsOfWar);
                     item = spoilsOfWar;
+                }
+                break;
+            case ItemType.Props:
+                PropsData propsData = (PropsData)GetItemByID(id, type);
+                if (propsData != null)
+                {
+                    Sprite icon = Resources.Load<Sprite>("Icons/" + propsData.icon);
+                    Item props = new Props(
+                        propsData.itemName,
+                        type,
+                        1,
+                        icon,
+                        propsData.sellPrice,
+                        propsData.listPrice,
+                        propsData.level,
+                        propsData.id,
+                        Item.ItemIDGenerator.GetUniqueID(),
+                        propsData.description,
+                        propsData.itemEffect,
+                        propsData.itemEffect1,
+                        propsData.itemEffect2
+                    );
+                    Inventory.Instance.AddItem(props);
+                    item = props;
                 }
                 break;
         }
@@ -335,5 +388,39 @@ public class SpoilsOfWarData
         this.sellPrice = sellPrice;
         this.listPrice = listPrice;
         this.level = level;
+    }
+}
+
+[System.Serializable]
+public class PropsData
+{
+    //通用属性
+    public int id;
+    public string itemName;
+    public string icon;
+    public string description;
+
+    // 道具特有属性
+    public string level;
+    public float listPrice;
+    public float sellPrice;
+    public int itemEffect;     // 道具效果类型
+    public float itemEffect1;  // 效果参数1
+    public float itemEffect2;  // 效果参数2
+
+    public PropsData(int id, string itemName, string icon, string description, 
+        string level, float listPrice, float sellPrice, 
+        int itemEffect, float itemEffect1, float itemEffect2)
+    {
+        this.id = id;
+        this.itemName = itemName;
+        this.icon = icon;
+        this.description = description;
+        this.level = level;
+        this.listPrice = listPrice;
+        this.sellPrice = sellPrice;
+        this.itemEffect = itemEffect;
+        this.itemEffect1 = itemEffect1;
+        this.itemEffect2 = itemEffect2;
     }
 }
