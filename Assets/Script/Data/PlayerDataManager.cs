@@ -36,13 +36,14 @@ public class PlayerDataManager : MonoBehaviour
         saveFilePath = Application.persistentDataPath + "/playerData.json";
         LoadDiscoveredItems();
     }
-    
-    public void AddCoins(int amount)
+    //增加金币
+    public void AddCoins(float amount)
     {
         if (amount > 0)
         {
             coin += amount;
             SavePlayerData();
+            ShopManager.Instance.ShowCoin();
             // 可以在这里触发UI更新等操作
             Debug.Log($"Added {amount} coins. New balance: {coin}");
         }
@@ -51,6 +52,8 @@ public class PlayerDataManager : MonoBehaviour
             Debug.LogWarning("Attempted to add invalid coin amount: " + amount);
         }
     }
+    
+    
 
     // 检查物品是否为首次获得
     public bool IsNewDiscovery(int id, ItemType itemType)
@@ -88,13 +91,6 @@ public class PlayerDataManager : MonoBehaviour
 
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(saveFilePath, json);
-    }
-    
-    //增加金币
-    public void AddCoin(float amount)
-    {
-        coin += amount;
-        SavePlayerData();
     }
 
     // 加载已发现物品列表

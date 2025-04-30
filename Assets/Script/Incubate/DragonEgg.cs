@@ -79,11 +79,11 @@ public class DragonEgg : Item
             // 更新孵化开始时间，以反映减少的时间
             incubationStartTime = Time.time - (eggBornTime - newRemainingTime);
         
-            // 如果减少后的时间小于等于0，立即完成孵化
-            if (newRemainingTime <= 0)
-            {
-                IncubationUI.Instance.GetHatchedDragon();
-            }
+            // // 如果减少后的时间小于等于0，立即完成孵化
+            // if (newRemainingTime <= 0)
+            // {
+            //     IncubationUI.Instance.GetHatchedDragon();
+            // }
         }
     }
 

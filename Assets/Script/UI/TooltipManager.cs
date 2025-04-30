@@ -142,11 +142,15 @@ using UnityEngine;
                     case ItemType.Dragon:
                         Dragon dragon = item as Dragon;
                         text.text = "生命值：" + dragon.life + "\n" + "攻击力：" + dragon.attack + "\n" + "防御力：" + dragon.defense + "\n" + "速度：" + dragon.speed;
-                        
+                        break;
+                    case ItemType.Props:
+                        Props props = item as Props;
+                        sellPrice = props.sellPrice;
+                        text.text = "价格：" + sellPrice + "\n" + "效果：" + props.description;
                         break;
                 }
             }
-        
+
             public void HideTooltip()
             {
                 // 只有当鼠标不在悬浮框上时才隐藏
@@ -175,11 +179,22 @@ using UnityEngine;
             public void SellItem()
             {
                 //增加金币
-                PlayerDataManager.Instance.AddCoin(sellPrice);
-                ShopManager.Instance.ShowCoin();
+                PlayerDataManager.Instance.AddCoins(sellPrice);
+                // ShopManager.Instance.ShowCoin();
                 //从背包中移除物品
                 Inventory.Instance.RemoveItem(currentItem);
                 tooltipPanel.SetActive(false);
                 currentItem = null;
+            }
+            
+            public void UseGameProps()
+            {
+                if (currentItem != null && currentItem.itemType == ItemType.Props)
+                {
+                    // 使用道具
+                    (currentItem as Props).Use();
+                    tooltipPanel.SetActive(false);
+                    currentItem = null;
+                }
             }
         }

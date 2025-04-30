@@ -34,14 +34,19 @@ public class Props : Item
     }
 
     // 使用道具的方法
-    public void Use(DragonEgg targetEgg = null)
+    public void Use()
     {
         switch (itemEffect)
         {
             case 1: // 加速孵化
-                if (targetEgg != null)
+                if (IncubationUI.Instance.incubatorController.currentEgg != null)
                 {
-                    targetEgg.ReduceHatchTime(itemEffect1);
+                    IncubationUI.Instance.incubatorController.currentEgg.ReduceHatchTime(itemEffect1);
+                }
+                else
+                {
+                    Debug.Log("没有正在孵化的龙蛋");
+                    return;
                 }
                 break;
                 

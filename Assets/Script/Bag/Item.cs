@@ -27,6 +27,7 @@ public class Item
         this.icon = icon;
         this.itemID = itemID;
         this.id = id;
+        this.description = description;
     }
 
     // 增加物品数量

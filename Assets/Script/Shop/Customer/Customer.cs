@@ -64,7 +64,7 @@ using UnityEngine;
                 // 更新金钱
                 money -= itemPrice;
                 textMeshPro.text = money.ToString();
-                PlayerDataManager.Instance.AddCoin(itemPrice);
+                PlayerDataManager.Instance.AddCoins(itemPrice);
                 ShopManager.Instance.ShowCoin();
         
                 hasBought = true;
