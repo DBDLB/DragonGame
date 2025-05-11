@@ -79,7 +79,11 @@ public class InventoryManager : MonoBehaviour
                         dragon.life.ToString(),
                         dragon.attack.ToString(),
                         dragon.defense.ToString(),
-                        dragon.speed.ToString()
+                        dragon.speed.ToString(),
+                        dragon.level,
+                        dragon.attributeA,
+                        dragon.attributeB,
+                        dragon.attributeC
                     );
                     dragonsList.Add(new InventoryDragonData() {itemID = item.itemID, quantity = item.quantity,dragons = dragonData});
                     break;
@@ -193,7 +197,12 @@ public class InventoryManager : MonoBehaviour
                         dragonData.dragons.id,
                         dragonData.itemID,
                         dragonData.dragons.description,
-                        dragonData.dragons.dragonModelAdress
+                        dragonData.dragons.dragonModelAdress,
+                        dragonData.dragons.level,
+                        dragonData.dragons.attributeA,
+                        dragonData.dragons.attributeB,
+                        dragonData.dragons.attributeC
+                        
                     );
                     dragon.quantity = dragonData.quantity;
                     Inventory.Instance.AddItem(dragon);
@@ -300,15 +309,18 @@ public class InventoryManager : MonoBehaviour
                             ItemType.Dragon,
                             1,
                             icon,
-                            // bool.Parse(dragonData.isStackable),
                             int.TryParse(dragonData.dragons.life.ToString(), out int life) ? life : 0,
                             int.TryParse(dragonData.dragons.attack.ToString(), out int attack) ? attack : 0,
                             int.TryParse(dragonData.dragons.defense.ToString(), out int defense) ? defense : 0,
                             int.TryParse(dragonData.dragons.speed.ToString(), out int speed) ? speed : 0,
                             dragonData.dragons.id,
-                            Item.ItemIDGenerator.GetUniqueID(),
+                            dragonData.itemID,
                             dragonData.dragons.description,
-                            dragonData.dragons.dragonModelAdress
+                            dragonData.dragons.dragonModelAdress,
+                            dragonData.dragons.level,
+                            dragonData.dragons.attributeA,
+                            dragonData.dragons.attributeB,
+                            dragonData.dragons.attributeC
                         );
                         dragon.quantity = dragonData.quantity;
                         Inventory.Instance.AddItem(dragon);

@@ -4,6 +4,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using Random = UnityEngine.Random;
 
 public class ItemManager : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class ItemManager : MonoBehaviour
     private Dictionary<int, DragonData> dragonDatabase = new Dictionary<int, DragonData>();
     private Dictionary<int, SpoilsOfWarData> spoilsOfWarDatabase = new Dictionary<int, SpoilsOfWarData>();
     private Dictionary<int, PropsData> propsDatabase = new Dictionary<int, PropsData>();
+    private Dictionary<int, TermPoolData> termPoolDatabase = new Dictionary<int, TermPoolData>();
+    private Dictionary<int, DragonEntryListData> dragonEntryListDatabase = new Dictionary<int, DragonEntryListData>();
     
     public static ItemManager instance;
     public static ItemManager Instance
@@ -51,6 +54,12 @@ public class ItemManager : MonoBehaviour
         
         // 加载道具数据
         LoadPropsData();
+        
+        // 加载词条池数据
+        LoadTermPoolData();
+        
+        // 加载龙词条表数据
+        LoadDragonEntryListData();
     }
     
     [System.Serializable]
@@ -136,6 +145,44 @@ public class ItemManager : MonoBehaviour
             Debug.LogError("Props JSON file not found at: " + filePath);
         }
     }
+    
+    //加载词条池表
+    void LoadTermPoolData()
+    {
+        string filePath = "Data/termPoolData";  // 词条池JSON文件
+        TextAsset jsonText = Resources.Load<TextAsset>(filePath);
+        if (jsonText)
+        {
+            TermPoolData[] itemArray = JsonConvert.DeserializeObject<TermPoolData[]>(jsonText.ToString());
+            foreach (var item in itemArray)
+            {
+                termPoolDatabase.Add(item.id, item);
+            }
+        }
+        else
+        {
+            Debug.LogError("Term Pool JSON file not found at: " + filePath);
+        }
+    }
+    
+    //加载
+    void LoadDragonEntryListData()
+    {
+        string filePath = "Data/dragonEntryListData";  // 词条池JSON文件
+        TextAsset jsonText = Resources.Load<TextAsset>(filePath);
+        if (jsonText)
+        {
+            DragonEntryListData[] itemArray = JsonConvert.DeserializeObject<DragonEntryListData[]>(jsonText.ToString());
+            foreach (var item in itemArray)
+            {
+                dragonEntryListDatabase.Add(item.id, item);
+            }
+        }
+        else
+        {
+            Debug.LogError("Dragon Entry List JSON file not found at: " + filePath);
+        }
+    } 
 
 // 根据道具ID和类型获取道具数据
     public object GetItemByID(int id, ItemType itemType)
@@ -222,7 +269,30 @@ public class ItemManager : MonoBehaviour
                     int attack = GetRandomValueFromRange(dragonData.attack);
                     int defense = GetRandomValueFromRange(dragonData.defense);
                     int speed = GetRandomValueFromRange(dragonData.speed);
-                    Item dragon = new Dragon(dragonData.itemName,type,1,icon,life,attack,defense,speed,dragonData.id,Item.ItemIDGenerator.GetUniqueID(),dragonData.description,dragonData.dragonModelAdress);
+                    
+                    // 为每个属性位置随机生成词条
+                    string finalAttributeA = GetRandomEntryFromPool(dragonData.attributeA);
+                    string finalAttributeB = GetRandomEntryFromPool(dragonData.attributeB);
+                    string finalAttributeC = GetRandomEntryFromPool(dragonData.attributeC);
+                    
+                    Item dragon = new Dragon(
+                        dragonData.itemName,
+                        type,
+                        1,
+                        icon,
+                        life,
+                        attack,
+                        defense,
+                        speed,
+                        dragonData.id,
+                        Item.ItemIDGenerator.GetUniqueID(),
+                        dragonData.description,
+                        dragonData.dragonModelAdress,
+                        dragonData.level,
+                        finalAttributeA,  // 使用随机生成的词条
+                        finalAttributeB,
+                        finalAttributeC
+                    );
                     Inventory.Instance.AddItem(dragon);
                     item = dragon;
                 }
@@ -274,6 +344,40 @@ public class ItemManager : MonoBehaviour
                 break;
         }
         return item;
+    }
+    
+    // 根据词条池ID获取随机词条ID
+    private string GetRandomEntryFromPool(string termPoolId)
+    {
+        // 获取词条池数据
+        if (int.TryParse(termPoolId, out int poolId) && termPoolDatabase.TryGetValue(poolId, out TermPoolData poolData))
+        {
+            // 获取词条ID和概率数组
+            string[] entryIds = poolData.GetAttributePortals();
+            float[] probabilities = poolData.GetAttributeProbabilities();
+
+            if (entryIds.Length == 0 || entryIds.Length != probabilities.Length)
+                return "0";
+
+            // 生成0-100之间的随机值
+            float randomValue = Random.Range(0f, 100f);
+        
+            // 累加概率并判断
+            float currentSum = 0;
+            for (int i = 0; i < probabilities.Length; i++)
+            {
+                currentSum += probabilities[i];
+                if (randomValue <= currentSum)
+                {
+                    return entryIds[i];
+                }
+            }
+        
+            // 如果没有命中任何词条，返回0表示空词条
+            return "0";
+        }
+
+        return "0";
     }
     
     private int GetRandomValueFromRange(string rangeString)
@@ -338,12 +442,12 @@ public class DragonEggData
 [System.Serializable]
 public class DragonData
 {
-    //通用属性
+    // 通用属性
     public int id;
     public string itemName;
     public string icon;
     public string description;
-    
+
     // 龙特有属性
     public string dragonModelAdress;
     public string life;
@@ -351,7 +455,26 @@ public class DragonData
     public string attack;
     public string speed;
     
-    public DragonData(int id, string itemName, string icon, string description, string dragonModelAdress, string life, string defense, string attack, string speed)
+    // 添加等级和属性字段
+    public string level;
+    public string attributeA;  // 属性A对应的词条池ID
+    public string attributeB;  // 属性B对应的词条池ID
+    public string attributeC;  // 属性C对应的词条池ID
+
+    public DragonData(
+        int id, 
+        string itemName, 
+        string icon, 
+        string description, 
+        string dragonModelAdress, 
+        string life, 
+        string defense, 
+        string attack, 
+        string speed,
+        string level,
+        string attributeA,
+        string attributeB,
+        string attributeC)
     {
         this.id = id;
         this.itemName = itemName;
@@ -362,6 +485,10 @@ public class DragonData
         this.defense = defense;
         this.attack = attack;
         this.speed = speed;
+        this.level = level;
+        this.attributeA = attributeA;
+        this.attributeB = attributeB;
+        this.attributeC = attributeC;
     }
 }
 
@@ -424,3 +551,89 @@ public class PropsData
         this.itemEffect2 = itemEffect2;
     }
 }
+
+[System.Serializable]
+public class TermPoolData
+{
+    // 词条池ID
+    public int id;
+    
+    // 词条池名称
+    public string name;
+    
+    // 词条ID列表字符串 (例如: "1091,1092")
+    public string attributePortal;
+    
+    // 词条概率列表字符串 (例如: "30,10")
+    public string attributePro;
+    
+    public TermPoolData(int id, string name, string attributePortal, string attributePro)
+    {
+        this.id = id;
+        this.name = name;
+        this.attributePortal = attributePortal;
+        this.attributePro = attributePro;
+    }
+    
+    // 辅助方法：获取词条ID数组
+    public string[] GetAttributePortals()
+    {
+        return attributePortal?.Split(',').Select(s => s.Trim()).ToArray() ?? new string[0];
+    }
+    
+    // 辅助方法：获取概率数组
+    public float[] GetAttributeProbabilities()
+    {
+        return attributePro?.Split(',')
+            .Select(s => float.TryParse(s.Trim(), out float result) ? result : 0f)
+            .ToArray() ?? new float[0];
+    }
+}
+
+[System.Serializable]
+public class DragonEntryListData
+{
+    // 词条ID
+    public int id;
+
+    // 词条名称
+    public string name;
+
+    // 词条描述
+    public string description;
+
+    // 词条等级（绿、银、金）
+    public string level;
+
+    // 词条效果类型
+    public int attributeEffect;
+
+    // 效果参数1-4
+    public float attributeEffect1;
+    public float attributeEffect2;
+    public float attributeEffect3;
+    public float attributeEffect4;
+
+    public DragonEntryListData(
+        int id,
+        string name,
+        string description,
+        string level,
+        int attributeEffect,
+        float attributeEffect1,
+        float attributeEffect2,
+        float attributeEffect3,
+        float attributeEffect4)
+    {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.level = level;
+        this.attributeEffect = attributeEffect;
+        this.attributeEffect1 = attributeEffect1;
+        this.attributeEffect2 = attributeEffect2;
+        this.attributeEffect3 = attributeEffect3;
+        this.attributeEffect4 = attributeEffect4;
+    }
+}
+

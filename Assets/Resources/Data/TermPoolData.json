@@ -1,0 +1,15 @@
+[
+  {
+    "id": "1081",
+    "name": "商店普池",
+    "attributePortal": "1091, 1092",
+    "attributePro": "30, 10"
+  },
+  {
+    "id": "1082",
+    "name": "派遣普池",
+    "attributePortal": "1094, 1095",
+    "attributePro": "30, 10"
+  }
+]
+

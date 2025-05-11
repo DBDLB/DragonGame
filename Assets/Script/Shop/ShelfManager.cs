@@ -61,24 +61,24 @@ using UnityEngine;
                     dragonEggsList.Add(new InventoryManager.InventoryDragonEggData() {itemID = item.itemID, quantity = item.quantity,dragonEggs = eggData});
                     break;
                 // 龙
-                case ItemType.Dragon:
-                    Dragon dragon = item as Dragon;
-                    DragonData dragonData = new DragonData
-                    (
-                        item.id,
-                        item.itemName,
-                        item.icon.name,
-                        dragon.description,
-                        // isStackable = item.isStackable.ToString(),
-                        
-                        dragon.dragonModelAdress,
-                        dragon.life.ToString(),
-                        dragon.attack.ToString(),
-                        dragon.defense.ToString(),
-                        dragon.speed.ToString()
-                    );
-                    dragonsList.Add(new InventoryManager.InventoryDragonData() {itemID = item.itemID, quantity = item.quantity,dragons = dragonData});
-                    break;
+                // case ItemType.Dragon:
+                //     Dragon dragon = item as Dragon;
+                //     DragonData dragonData = new DragonData
+                //     (
+                //         item.id,
+                //         item.itemName,
+                //         item.icon.name,
+                //         dragon.description,
+                //         // isStackable = item.isStackable.ToString(),
+                //         
+                //         dragon.dragonModelAdress,
+                //         dragon.life.ToString(),
+                //         dragon.attack.ToString(),
+                //         dragon.defense.ToString(),
+                //         dragon.speed.ToString()
+                //     );
+                //     dragonsList.Add(new InventoryManager.InventoryDragonData() {itemID = item.itemID, quantity = item.quantity,dragons = dragonData});
+                //     break;
                 
                 // 战利品
                 case ItemType.SpoilsOfWar:
@@ -179,38 +179,38 @@ using UnityEngine;
                 }
             }
         
-            // 加载龙
-            if (inventoryData.inventoryDragons != null)
-            {
-                foreach (var dragonData in inventoryData.inventoryDragons)
-                {
-                    Sprite icon = Resources.Load<Sprite>("Icons/" + dragonData.dragons.icon);
-                    Dragon dragon = new Dragon(
-                        dragonData.dragons.itemName,
-                        ItemType.Dragon,
-                        1,
-                        icon,
-                        // bool.Parse(dragonData.isStackable),
-                        int.TryParse(dragonData.dragons.life, out int life) ? life : 0,
-                        int.TryParse(dragonData.dragons.attack, out int attack) ? attack : 0,
-                        int.TryParse(dragonData.dragons.defense, out int defense) ? defense : 0,
-                        int.TryParse(dragonData.dragons.speed, out int speed) ? speed : 0,
-                        dragonData.dragons.id,
-                        dragonData.itemID,
-                        dragonData.dragons.description,
-                        dragonData.dragons.dragonModelAdress
-                    );
-                    dragon.quantity = dragonData.quantity;
-                    foreach (var shelfSlot in shelfSlots)
-                    {
-                        if (shelfSlot.GetCurrentItem() == null)
-                        {
-                            shelfSlot.PlaceItem(dragon);
-                            break;
-                        }
-                    }
-                }
-            }
+            // // 加载龙
+            // if (inventoryData.inventoryDragons != null)
+            // {
+            //     foreach (var dragonData in inventoryData.inventoryDragons)
+            //     {
+            //         Sprite icon = Resources.Load<Sprite>("Icons/" + dragonData.dragons.icon);
+            //         Dragon dragon = new Dragon(
+            //             dragonData.dragons.itemName,
+            //             ItemType.Dragon,
+            //             1,
+            //             icon,
+            //             // bool.Parse(dragonData.isStackable),
+            //             int.TryParse(dragonData.dragons.life, out int life) ? life : 0,
+            //             int.TryParse(dragonData.dragons.attack, out int attack) ? attack : 0,
+            //             int.TryParse(dragonData.dragons.defense, out int defense) ? defense : 0,
+            //             int.TryParse(dragonData.dragons.speed, out int speed) ? speed : 0,
+            //             dragonData.dragons.id,
+            //             dragonData.itemID,
+            //             dragonData.dragons.description,
+            //             dragonData.dragons.dragonModelAdress
+            //         );
+            //         dragon.quantity = dragonData.quantity;
+            //         foreach (var shelfSlot in shelfSlots)
+            //         {
+            //             if (shelfSlot.GetCurrentItem() == null)
+            //             {
+            //                 shelfSlot.PlaceItem(dragon);
+            //                 break;
+            //             }
+            //         }
+            //     }
+            // }
         
             // 加载战利品
             if (inventoryData.inventorySpoilsOfWar != null)

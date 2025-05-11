@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShowDragonUI : MonoBehaviour
+public class ShowDispatchDragonUI : MonoBehaviour
 {
-    public GameObject DragonButton;
-    public GameObject NormalBagButton;
+    public GameObject DispatchDragonButton;
     public GameObject Content;
     
     public List<GameObject> slots = new List<GameObject>();
@@ -27,8 +26,8 @@ public class ShowDragonUI : MonoBehaviour
                 if (item.itemType == ItemType.Dragon)
                 {
                     //生成一个DragonEggButton到Content下
-                    GameObject slot = Instantiate(DragonButton, Content.transform);
-                    slot.GetComponent<DragonButton>().item = item as Dragon;
+                    GameObject slot = Instantiate(DispatchDragonButton, Content.transform);
+                    slot.GetComponent<DispatchDragonButton>().item = item as Dragon;
                     Image image = null;
                     Image[] images = slot.GetComponentsInChildren<Image>(true);
                     foreach (var img in images)
@@ -42,25 +41,6 @@ public class ShowDragonUI : MonoBehaviour
                     slots.Add(slot);
                 }
             }
-            
-            // if (slots.Count < Inventory.Instance.maxSlots)
-            // {
-                for (int i = 0; i < 6; i++)
-                {
-                    GameObject slot = Instantiate(NormalBagButton, Content.transform);
-                    Image image = null;
-                    Image[] images = slot.GetComponentsInChildren<Image>(true);
-                    foreach (var img in images)
-                    {
-                        if (img.gameObject != slot)
-                        {
-                            image = img;
-                        }
-                    }
-                    image.sprite = null;
-                    slots.Add(slot);
-                }
-            // }
         }
     
 }

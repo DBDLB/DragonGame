@@ -160,7 +160,7 @@ public class DispatchManager : MonoBehaviour
             Debug.Log("请选择龙和地点！");
             return;
         }
-        DispatchDefinite.Instance.textMeshProUGUI.text = "加油打气！";
+        // DispatchDefinite.Instance.textMeshProUGUI.text = "加油打气！";
         DispatchLocation.Location location = dispatchLocation.allLocations.Find(l => l.id == locationID);
         SelectedLocation = location;
         if (location == null) return;
@@ -174,36 +174,43 @@ public class DispatchManager : MonoBehaviour
         // Debug.Log($"派遣龙 {selectedDragon.itemName} 到 {location.locationName}，预计时间：{(int)DispatchTime} 秒");
     }
 
+    // 派遣倒计时协程
     private IEnumerator DispatchCountdown(DispatchTask task)
     {
         // dispatchSlider.maxValue = task.remainingTime;
         dispatchSlider.sprite = GetSpriteByID(task.locationID);
+        float clearClickCountTime = 0;
         float maxTime = task.totalTime;
         while (task.remainingTime > 0)
         {
             yield return new WaitForSeconds(0.02f);
             task.remainingTime -= 0.02f;
             task.remainingTime = task.remainingTime;
-            DispatchDefinite.Instance.clickCount = 0;
+            clearClickCountTime += 0.02f;
+            if (clearClickCountTime >= 1)
+            {
+                clearClickCountTime = 0;
+                DispatchDefinite.Instance.clickCount = 0;
+            }
             dispatchSlider.material.SetFloat("_Progress", 1-task.remainingTime / maxTime);
             // Debug.Log($"任务剩余时间：{(int)task.remainingTime} 秒");
             dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = $"任务剩余时间：{(int)task.remainingTime} 秒";
         }
-        dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = "任务完成！";
         task.isCompleted = true;
         getSpoilsOfWar = true;
         dispatchSlider.sprite = defaultSprite;
+        locationID = 0;
+        selectedDragon = null;
         dispatchSlider.material.SetColor("_Color", new Color(3, 3, 3, 1));
+        dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = "任务完成！";
     }
 
     public void OnDispatchComplete(DispatchTask task)
     {
         Debug.Log($"派遣完成！{task.assignedDragon.itemName} 从 {task.locationID} 归来，获得战利品！");
-        selectedDragon = null;
         dragonImage.color = new Color(0, 0, 0, 0);
-        locationID = 0;
         dispatchSlider.GetComponent<Button>().interactable = false;
-        DispatchDefinite.Instance.textMeshProUGUI.text = "派遣完成！";
+        // DispatchDefinite.Instance.textMeshProUGUI.text = "派遣完成！";
         // 处理战利品奖励逻辑
         activeTasks.Remove(task);
     }
@@ -317,10 +324,12 @@ public class DispatchManager : MonoBehaviour
             foreach (var taskData in taskDataList)
             {
                 Dragon assignedDragon = Inventory.Instance.GetByItemID(taskData.itemID) as Dragon;
+                selectedDragon.id = assignedDragon.itemID;
                 if (assignedDragon != null)
                 {
                     dragonImage.color = new Color(1, 1, 1, 1);
                     dragonImage.sprite = assignedDragon.icon;
+                    locationID = taskData.locationID;
                     DispatchTask task = new DispatchTask(taskData.locationID, assignedDragon, taskData.remainingTime, taskData.totalTime, taskData.isCompleted);
                     SelectedLocation = dispatchLocation.allLocations.Find(l => l.id == task.locationID);
                     activeTasks.Add(task);
@@ -328,13 +337,15 @@ public class DispatchManager : MonoBehaviour
                     if (!task.isCompleted)
                     {
                         newTask = task;
-                        DispatchDefinite.Instance.textMeshProUGUI.text = "加油打气！";
+                        // DispatchDefinite.Instance.textMeshProUGUI.text = "加油打气！";
                         StartCoroutine(DispatchCountdown(task));
                     }
                     else
                     {
                         newTask = task;
-                        DispatchDefinite.Instance.textMeshProUGUI.text = "任务完成！";
+                        locationID = 0;
+                        selectedDragon = null;
+                        dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = "任务完成！";
                         dispatchSlider.material.SetFloat("_Progress", 1);
                         dispatchSlider.material.SetColor("_Color", new Color(3, 3, 3, 1));
                         getSpoilsOfWar = true;

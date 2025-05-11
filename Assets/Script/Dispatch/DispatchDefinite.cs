@@ -58,25 +58,11 @@ public class DispatchDefinite : MonoBehaviour
     public int clickCount = 0;
     private void OnButtonPressed()
     {
-        if (DispatchManager.Instance.getSpoilsOfWar)
-        {
-            DispatchManager.Instance.OnDispatchComplete(DispatchManager.Instance.newTask);
-            DispatchManager.Instance.GetSpoilsOfWar();
-            DispatchManager.Instance.getSpoilsOfWar = false;
-            DispatchManager.Instance.showSpoilsOfWar.SetActive(true);
-            textMeshProUGUI.text = "确认出发";
-            // DispatchManager.Instance.dragonImage.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "龙选择";
-            DispatchManager.Instance.dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = "";
-            DispatchManager.Instance.dispatchSlider.material.SetFloat("_Progress", 1);
-            DispatchManager.Instance.dispatchSlider.material.SetColor("_Color", new Color(1, 1, 1, 1));
-            DispatchManager.Instance.dispatchSlider.sprite = DispatchManager.Instance.defaultSprite;
-            DispatchManager.Instance.dispatchSlider.GetComponent<Button>().interactable = true;
-            return;
-        }
 
         if (clickCount<=2&&DispatchManager.Instance.selectedDragon != null&&DispatchManager.Instance.selectedDragon.id != 0&&DispatchManager.Instance.locationID!=0)
         {
-            ProcessButtonAction();
+            Debug.Log(clickCount);
+            DispatchManager.Instance.newTask.remainingTime -= 1;
             clickCount++;
         }
         isButtonPressed = true;
@@ -97,21 +83,16 @@ public class DispatchDefinite : MonoBehaviour
             yield return new WaitForSeconds(responseInterval);
             if (isButtonPressed)
             {
-                ProcessButtonAction();
+                DispatchManager.Instance.newTask.remainingTime -= 1;
             }
         }
     }
     
-    private void ProcessButtonAction()
+    public void ProcessButtonAction()
     {
         if (DispatchManager.Instance.newTask.isCompleted)
         {
             DispatchManager.Instance.StartDispatch();
-        }
-        else
-        {
-            DispatchManager.Instance.newTask.remainingTime -= 1;
-            // DispatchManager.Instance.dispatchSlider.GetComponentInChildren<TextMeshProUGUI>().text = $"任务剩余时间：{DispatchManager.Instance.newTask.remainingTime} 秒";
         }
     }
     

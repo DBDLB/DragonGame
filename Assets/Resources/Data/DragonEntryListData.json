@@ -1,0 +1,69 @@
+[
+  {
+    "id": "1091",
+    "name": "速速来客",
+    "description": "被龙吸引，客人会来得略微快。",
+    "level": "绿",
+    "attributeEffect": "1",
+    "attributeEffect1": "10",
+    "attributeEffect2": "0",
+    "attributeEffect3": "0",
+    "attributeEffect4": "0"
+  },
+  {
+    "id": "1092",
+    "name": "速速来客",
+    "description": "被龙吸引，客人来得很快。",
+    "level": "银",
+    "attributeEffect": "1",
+    "attributeEffect1": "30",
+    "attributeEffect2": "0",
+    "attributeEffect3": "0",
+    "attributeEffect4": "0"
+  },
+  {
+    "id": "1093",
+    "name": "速速来客",
+    "description": "被龙吸引，客人马不停蹄地进来。",
+    "level": "金",
+    "attributeEffect": "1",
+    "attributeEffect1": "50",
+    "attributeEffect2": "0",
+    "attributeEffect3": "0",
+    "attributeEffect4": "0"
+  },
+  {
+    "id": "1094",
+    "name": "快去快回",
+    "description": "归心似箭，会略微快地完成派遣回家。",
+    "level": "绿",
+    "attributeEffect": "2",
+    "attributeEffect1": "0",
+    "attributeEffect2": "10",
+    "attributeEffect3": "0",
+    "attributeEffect4": "0"
+  },
+  {
+    "id": "1095",
+    "name": "快去快回",
+    "description": "归心似箭，会很快完成派遣回家。",
+    "level": "银",
+    "attributeEffect": "2",
+    "attributeEffect1": "0",
+    "attributeEffect2": "20",
+    "attributeEffect3": "0",
+    "attributeEffect4": "0"
+  },
+  {
+    "id": "1096",
+    "name": "快去快回",
+    "description": "归心似箭，会马不停蹄地完成派遣回家。",
+    "level": "金",
+    "attributeEffect": "2",
+    "attributeEffect1": "0",
+    "attributeEffect2": "30",
+    "attributeEffect3": "0",
+    "attributeEffect4": "0"
+  }
+]
+
