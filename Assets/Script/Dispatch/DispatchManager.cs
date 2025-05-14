@@ -160,6 +160,8 @@ public class DispatchManager : MonoBehaviour
             Debug.Log("请选择龙和地点！");
             return;
         }
+        PlaceSelectionButton.Instance.isReady = false;
+        UIManager.Instance.CloseUI();
         // DispatchDefinite.Instance.textMeshProUGUI.text = "加油打气！";
         DispatchLocation.Location location = dispatchLocation.allLocations.Find(l => l.id == locationID);
         SelectedLocation = location;

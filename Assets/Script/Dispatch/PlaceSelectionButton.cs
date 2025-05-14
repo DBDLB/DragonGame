@@ -7,12 +7,30 @@ using UnityEngine.UI;
 public class PlaceSelectionButton : MonoBehaviour
 {
     public GameObject DispatchPrepare;
-    private bool isButtonPressed = true;
+    public bool isReady = true;
+    
+    public static PlaceSelectionButton instance;
+    public static PlaceSelectionButton Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<PlaceSelectionButton>();
+                if (instance == null)
+                {
+                    GameObject singleton = new GameObject(typeof(PlaceSelectionButton).Name);
+                    instance = singleton.AddComponent<PlaceSelectionButton>();
+                }
+            }
+            return instance;
+        }
+    }
     private void OnEnable()
     {
         // 注册按钮的点击事件
         GetComponentInChildren<Button>().onClick.AddListener(OnClicked);
-        isButtonPressed = true;
+        isReady = true;
     }
     private void OnClicked()
     {
@@ -29,12 +47,12 @@ public class PlaceSelectionButton : MonoBehaviour
             DispatchManager.Instance.dispatchSlider.material.SetColor("_Color", new Color(1, 1, 1, 1));
             DispatchManager.Instance.dispatchSlider.sprite = DispatchManager.Instance.defaultSprite;
             DispatchManager.Instance.dispatchSlider.GetComponent<Button>().interactable = true;
-            isButtonPressed = true;
+            isReady = true;
         }
-        else if(isButtonPressed)
+        else if(isReady)
         {
-            DispatchPrepare.SetActive(true);
-            isButtonPressed = false;
+            UIManager.Instance.ShowPanel(DispatchPrepare.name);
+            // DispatchPrepare.SetActive(true);
         }
     }
 }
